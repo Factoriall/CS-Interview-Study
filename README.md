@@ -5,18 +5,18 @@
 ## 목차
 - [목적](#목적)
 - [기본 CS 지식](#기본-CS-지식)
-  * [Network](#Network)
-  * [Database](#Database)
-  * [OS](#OS)
-  * [Data Structure](#Data-Structure)
-  * [Algorithm](#Algorithm)
+  * [Network](./Network/README.md)
+  * [Database](./Database/README.md)
+  * [OS](./OS/README.md)
+  * [Data Structure](./DataStructure/README.md)
+  * [Algorithm](./Algorithm/README.md)
 - [포트폴리오 관련 지식](#포트폴리오-관련-지식)
-  * [Java](#Java)
-  * [Design Pattern(Head First Design Patterns 정리)](#Design-Pattern)
-  * [Android](#Android)
-  * [사용 라이브러리](#사용-라이브러리)
+  * [Java](./Java/README.md)
+  * [Design Pattern(Head First Design Patterns 정리)](./DesignPattern/README.md)
+  * [Android](./Android/README.md)
+  * [사용 라이브러리](./Library/README.md)
 - [참고 사이트](#참고-사이트)
-------------------
+---
 ## 목적
 - CS 관련 지식 습득 및 관련 정보를 정리해서 기술 면접에 도움이 되기 위한 목적으로 만듦
 
@@ -48,7 +48,7 @@
 + 다익스트라
 + MST
 + DP / Bitmasking
-------------------
+---
 ## 포트폴리오 관련 지식
 ### Java [Link](./Java/README.md)
 + 객체지향 VS 절차지향
@@ -74,7 +74,7 @@
 + POI
 + MPAndroidChart
 
-------------------
-## 참고
+---
+## 참고 사이트
 - https://github.com/JaeYeopHan/Interview_Question_for_Beginner#
 - https://garden1500.tistory.com/m/11?category=0
