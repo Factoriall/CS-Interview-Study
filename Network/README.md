@@ -1,5 +1,13 @@
 # Network
 
+- HTTP 관련
+  * [HTTP vs HTTPS](#HTTP-vs-HTTPS)
+  * [HTTP 1.1 vs 2.0 vs 3.0](#HTTP-1.1-vs-2-vs-3)
+  * RESTful
+  * HTTP 응답코드
+- 웹브라우저에 google.com을 쳤을 때 일어나는 일
+- TCP vs UDP
+
 ## HTTP vs HTTPS
 ### HTTP
 ![HTTP](../image/network_http.png)
@@ -33,7 +41,7 @@
 6. 암호화된 인증서를 복호화하여 얻은 A기업의 공개키로 데이터를 암호화하여 요청을 전송
 
 ---
-## HTTP 1.1 vs HTTP 2 vs HTTP 3
+## HTTP 1.1 vs 2 vs 3
 ### HTTP 1.1
 #### 특징
 - Keep-Alive: 한 번 맺었던 연결을 끊지 않고 지속적으로 유지하기 위해 넣는 헤더 정보
