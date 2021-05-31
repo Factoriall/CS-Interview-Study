@@ -5,16 +5,16 @@
 ## 목차
 - [목적](#목적)
 - [기본 CS 지식](#기본-CS-지식)
-  * [Network](./Network/README.md)
-  * [Database](./Database/README.md)
-  * [OS](./OS/README.md)
-  * [Data Structure](./DataStructure/README.md)
-  * [Algorithm](./Algorithm/README.md)
+  * [Network](./Network/README.md) - 정리 중
+  * [Database](./Database/README.md) - 정리 중
+  * [OS](./OS/README.md) - 정리 중
+  * [Data Structure](./DataStructure/README.md) - 정리 중
+  * [Algorithm](./Algorithm/README.md) - 정리 중
 - [포트폴리오 관련 지식](#포트폴리오-관련-지식)
-  * [Java](./Java/README.md)
-  * [Design Pattern(Head First Design Patterns 정리)](./DesignPattern/README.md)
-  * [Android](./Android/README.md)
-  * [사용 라이브러리](./Library/README.md)
+  * [Java](./Java/README.md) - 정리 중
+  * [Design Pattern(Head First Design Patterns 정리)](./DesignPattern/README.md) - 정리 중
+  * [Android](./Android/README.md) - 정리 중
+  * [사용 라이브러리](./Library/README.md) - 정리 중
 - [참고 사이트](#참고-사이트)
 ---
 ## 목적
