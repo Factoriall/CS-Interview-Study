@@ -3,9 +3,9 @@
 - HTTP 관련
   * [HTTP vs HTTPS](#HTTP-vs-HTTPS)
   * [HTTP 1.1 vs 2.0 vs 3.0](#HTTP-1-vs-2-vs-3)
-  * RESTful
-  * HTTP 응답코드
-- 웹브라우저에 google.com을 쳤을 때 일어나는 일
+  * [REST](#REST)
+  * [HTTP 응답코드](#HTTP-응답코드)
+- [웹브라우저에 구글을 쳤을 때 일어나는 일](#웹브라우저에-구글을-쳤을-때-일어나는-일)
 - TCP vs UDP
 
 ## HTTP vs HTTPS
@@ -79,3 +79,73 @@
 - 패킷 손실 감지에 걸리는 시간 단축
 - HTTP 2와 같은 Multiplexing 사용
 - 기존 IP 주소 대신 랜덤 값인 Connection ID 사용 - 기존 연결을 유지하기 쉬움(Wifi -> LTE 전환 등등...)
+---
+## REST
+- 정의: REpresentational State Transfer)의 약자, World Wide Web 같은 분산 하이퍼미디어 시스템을 위한 SW 아키텍쳐의 한 형식
+
+### 특징
+1. Uniform: 특정한 인터페이스 사용
+2. Stateless: 상태를 따로 저장 및 관리하지 않음
+3. Cacheable: HTTP가 가지는 캐싱을 활용 가능
+4. Self-Descriptiveness: REST API 메세지만 보고도 쉽게 이해가 가능한 자체 표현 구조로 표현
+5. Client-Server: 서버에서 API 제공, 클라이언트는 사용자 인증 및 컨텍스트를 직접 관리하눈 구조
+6. Hierachical Structure: 다층 계층으로 구성 가능, 보안 및 암호화 계층 추가 및 네트워크 기반의 중간 매체를 활용 가능
+
+### RESTful 디자인
+![REST](../image/network_restful.png)
+1. 리소스와 행위를 명시적으로 직관적으로 분리
+- URI는 정보의 자원을 표시, 동사 대신 명사로 표시
+- 자원에 대한 행위는 HTTP Method로 표현
+  + GET: URI가 가진 정보를 검색하고 응답
+  + POST: 요청된 자원 생성, 새로 작성된 리소스의 경우 HTTP 헤더 항목에 Location: URI 포함
+  + PUT: 요청된 자원을 수정
+  + DELETE: 요청된 자원을 삭제 요청
+2. 메세지의 경우 Header와 Body를 명확히 분리
+- 보낼 Entity 정보는 Body, API 버전 정보 및 응답받고자하는 MIME 타입 등은 Header에 담기
+3. API 버전 관리
+- 환경에 따라 API 버전 관리, 변경 시 하위호환성을 보장해야 됨
+4. 서버와 클라이언트가 같은 방식을 사용해서 요청
+- 서버/클라이언트가 둘다 json으로 보내던가 text로 보내던가 하는 식으로, URI가 플랫폼 중립적으로 작동
+---
+## HTTP 응답코드
+- 1XX: Information responses, 서버가 요청을 받았고 클라이언트는 작업을 계속 진행하라는 의미
+  + 100 Continue: 진행중
+  + 101 Switching Protocol: 업그레이드 요청 헤더에 대한 응답
+  + 102 Processing: 요청을 수신하고 처리 중이나 제대로 된 응답을 줄 수 없음
+- 2XX: Sucessful responses: 요청 성공
+  + 200 OK: 요청을 성공적으로 수행
+  + 201 Created: 요청 성공 및 새로운 리소스 생성
+- 3XX: Redirection messages
+  + 301 Moved Permanently: 요청한 리소스의 URI가 변경됨
+- 4XX: Client error responses
+  + 400 Bad Request: 잘못된 문법으로 인해 서버가 요청을 이해할 수 없음
+  + 401 Unauthorized: 인증된 클라이언트가 아니라서 답할 수 없음, 인증을 해야됨
+  + 403 Forbidden: 컨텐츠에 접근할 권리가 없음, 401가 다르게 서버가 클라이언트가 누군지 알고 있음
+  + 404 Not Found: 요청받은 리소스(URI)를 받을 수 없음
+  + 405 Not Acceptable: 요청 메소드를 서버에서 알고 있지만 제거되어 사용할 수 없음
+- 5XX: Server error responses
+  + 500 Internal Server Error: 웹사이트 서버에 문제가 발생했음
+---
+## 웹브라우저에 google.com를 쳤을 때 일어나는 일
+![google](../image/network_google.png)
+### 1. 웹브라우저에서 일어나는 일
+![dns](../image/network_dns.png)
+
+- 1-1) URI 입력 시 도메인 네임을 DNS 서버에서 검색
+- 1-2) 검색해서 나온 IP 주소를 찾아서 URI 정보와 같이 HTTP에 송신
+- 1-3) 이 정보를 HTTP 프로토콜에 따라 HTTP 요청 메세지 생성
+### 2. 프로토콜 스택에서 일어나는 과정
+![protocol_stack](../image/network_protocolstack.png)
+- 프로토콜 스택(TCP/IP 4-5계층): 운영체제에 내장된 네트워크 제어용 소프트퀘어
+- 2-1) 전송(Transport) 계층에서 TCP 프로토콜 따라서 신뢰성 있게 전송을 보장 및 헤더 붙인 세그먼트 형태로 네트워크 계층에 전달
+- 2-2) 네트워크(Network) 계층에서 IP 프로토콜 따라 목적지로 데이터를 전송하기 위해 거치는 경로 결정, 이러한 정보가 담긴 헤더를 붙여 패킷(IP 다이어그램) 형태로 전달
+- 2-3) 링크(Link) 계층에서 ARP/RARP 프로토콜에 따라 기기 고유의 주소인 MAC 주소를 대응, 관련 정보를 붙인 프레임으로 보냄
+- 2-4) 물리(Physical) 계층에서 스위칭 허브를 경유해서 전기 신호로 변환시켜 신호 송출
+### 3. 인터넷에서 일어나는 일
+- 3-1) IP 프로토콜 따라 얻은 라우팅 경로 따라 목적지로 이동
+- 3-2) 도착 후 방화벽이 패킷이 정상적인지 확인
+- 3-3) 엑세스 페이지의 데이터가 캐시 서버에 존재할 시 웹서버로 보낼 필요 없이 바로 캐시 서버에서 값을 꺼냄
+### 4. 웹서버에서 일어나는 일
+- 4-1) 웹서버에 도착 시 웹 서버 쪽의 프로토콜 스택이 패킷 추출 및 메세지 복원
+- 4-2) 요청에 따른 데이터를 응답 메세지에 넣어 클라이언트로 회송
+- 4-3) 왔던 방식 그대로 응답 메세지가 클라이언트로 전달
