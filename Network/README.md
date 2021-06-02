@@ -167,6 +167,7 @@
 - 속도가 느린 편
 - 전이중(양방향 동시), 점대점(2개의 종단점) -> 브로드캐스팅 및 멀티캐스팅 지원을 하지 않음
 - HTTP, Email, File 전송 시 사용
+
 ![header](../image/network_tcpheader.png)
 
 #### Handshaking
@@ -174,6 +175,7 @@
 
   + 3-Way Handshaking
 ![3wayHandshaking](../image/network_3wayhandshaking.png)
+
   + 초기 연결을 설정 시 사용
   + 순서
   1. 클라이언트가 서버 접속 요청하는 SYN(a) 패킷을 보냄
@@ -183,6 +185,7 @@
 
   + 4-Way Handshaking
 ![4wayHandshaking](../image/network_4wayhandshaking.png)
+
   - 연결을 해제할 시 사용
   - 순서
   1. 클라이언트에서 연결 종료하겠다는 FIN 메세지를 보냄
@@ -198,10 +201,10 @@
 
 ![slidingwindow](../image/network_slidingwindow.png)
 
-
 #### 오류 제어
 - 데이터 처리 시 발견되는 오류를 처리하고 재전송 작업을 줄이기 위한 제어 과정
 ![error](../image/network_errorcontrol.png)
+
 1. Stop and Wait: 매번 전송 패킷에 대한 확인 응답을 받아야 그 다음의 패킷 전달
 2. Go-Back-N: 프레임 손상 확인 시 손상난 프레임 부분부터 다시 보냄, 그 뒤에 보내졌던 패킷들은 모두 버림
 3. Selective Repeat: 분실된 프레임만 재전송하는 방식, 받는 측에서 따로 버퍼를 생성해서 관리해줘야 함
@@ -209,8 +212,11 @@
 #### 혼잡 제어
 - 네트워크 상황에 따라 송신 측에서 보내는 데이터 전송 속도를 강제로 조절
 - 제어 방법
+
 ![traffic](../image/network_trafficcontrol.png)
+
 1. Slow Start: 처음 시작 시 패킷이 문제없이 도착할 때마다 Window size를 지수적으로 증가, 혼잡이 발생했던 window size의 절반까지 늘림
+
 ![retransmit](../image/network_retransmit.png)
 2. Fast Retransmit: 패킷이 손실되면 중복된 ACK를 보내고 이것이 3번 반복 시 손실된 것으로 간주하고 서버 측에서 즉시 손실로 간주된 패킷 재전송
 3. Fast Recovery: 혼잡 상태가 될 시 window size를 절반으로 줄임
