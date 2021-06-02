@@ -5,7 +5,7 @@
 ## 목차
 - [목적](#목적)
 - [기본 CS 지식](#기본-CS-지식)
-  * [Network](./Network/README.md) - 정리 중
+  * [Network](./Network/README.md)
   * [Database](./Database/README.md) - 정리 중
   * [OS](./OS/README.md) - 정리 중
   * [Data Structure](./DataStructure/README.md) - 정리 중

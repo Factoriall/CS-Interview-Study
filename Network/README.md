@@ -6,7 +6,7 @@
   * [REST](#REST)
   * [HTTP 응답코드](#HTTP-응답코드)
 - [웹브라우저에 구글을 쳤을 때 일어나는 일](#웹브라우저에-구글을-쳤을-때-일어나는-일)
-- TCP vs UDP
+- [TCP vs UDP](#TCP-vs-UDP)
 
 ## HTTP vs HTTPS
 ### HTTP
@@ -126,7 +126,7 @@
 - 5XX: Server error responses
   + 500 Internal Server Error: 웹사이트 서버에 문제가 발생했음
 ---
-## 웹브라우저에 google.com를 쳤을 때 일어나는 일
+## 웹브라우저에 구글을 쳤을 때 일어나는 일
 ![google](../image/network_google.png)
 ### 1. 웹브라우저에서 일어나는 일
 ![dns](../image/network_dns.png)
@@ -149,3 +149,81 @@
 - 4-1) 웹서버에 도착 시 웹 서버 쪽의 프로토콜 스택이 패킷 추출 및 메세지 복원
 - 4-2) 요청에 따른 데이터를 응답 메세지에 넣어 클라이언트로 회송
 - 4-3) 왔던 방식 그대로 응답 메세지가 클라이언트로 전달
+---
+## TCP vs UDP
+### 공통점
+- 전송 계층에서 사용하는 대표적인 프로토콜
+- IP 프로토콜 기반으로 구현
+
+### TCP
+
+![tcp](../image/network_tcppacket.png)
+- 연결지향형 프로토콜
+  + 가상 회선 패킷 교환 방식 사용
+  + 순서 보장
+  + 신뢰성 있는 데이터 전송
+  + 연결 보장을 위해 **handshaking** 사용
+- 혼잡 제어 & 흐름 제어 & 오류 제어
+- 속도가 느린 편
+- 전이중(양방향 동시), 점대점(2개의 종단점) -> 브로드캐스팅 및 멀티캐스팅 지원을 하지 않음
+- HTTP, Email, File 전송 시 사용
+![header](../image/network_tcpheader.png)
+
+#### Handshaking
+- 3-way handshaking 및 4-way handshaking으로 구분
+
+  + 3-Way Handshaking
+![3wayHandshaking](../image/network_3wayhandshaking.png)
+  + 초기 연결을 설정 시 사용
+  + 순서
+  1. 클라이언트가 서버 접속 요청하는 SYN(a) 패킷을 보냄
+  2. 서버가 SYN(a) 수신, 요청을 수락한다는 ACK(a+1) 및 SYN(b) 패킷을 보냄
+  3. 클라이언트에서 수신 및 ACK(b+1) 패킷을 서버로 보냄
+  4. 서버가 수신한 후에 연결 설정
+
+  + 4-Way Handshaking
+![4wayHandshaking](../image/network_4wayhandshaking.png)
+  - 연결을 해제할 시 사용
+  - 순서
+  1. 클라이언트에서 연결 종료하겠다는 FIN 메세지를 보냄
+  2. 서버는 응답 ACK를 보내고 동시에 해당 포트에 연결되어 있는 애플리케이션에게 close() 요청
+  3. ACK 받은 클라이언트는 대기 상태 돌입
+  4. close() 요청 받은 서버 애플리케이션은 종료 프로세스 진행 후 FIN을 클라이언트로 보냄
+  5. 이를 받은 클라이어트는 ACK를 서버에 전송하고 일정 시간 대기 후 close, ACK 받은 서버도 포트를 닫음
+
+#### 흐름 제어
+- 송신 측의 데이터 처리 속도 조절을 통해 수신자의 버퍼 오버플로우 및 패킷 손실 방지
+1. Stop and Wait: 매번 전송 패킷에 대한 확인 응답을 받아야 다음 패킷 전송
+2. Sliding Window: 윈도우 포함 모든 패킷을 전송하고 전달이 확인되는대로 윈도우를 옆으로 옮겨 다음 패킷을 전송하는 방식  
+
+![slidingwindow](../image/network_slidingwindow.png)
+
+
+#### 오류 제어
+- 데이터 처리 시 발견되는 오류를 처리하고 재전송 작업을 줄이기 위한 제어 과정
+![error](../image/network_errorcontrol.png)
+1. Stop and Wait: 매번 전송 패킷에 대한 확인 응답을 받아야 그 다음의 패킷 전달
+2. Go-Back-N: 프레임 손상 확인 시 손상난 프레임 부분부터 다시 보냄, 그 뒤에 보내졌던 패킷들은 모두 버림
+3. Selective Repeat: 분실된 프레임만 재전송하는 방식, 받는 측에서 따로 버퍼를 생성해서 관리해줘야 함
+
+#### 혼잡 제어
+- 네트워크 상황에 따라 송신 측에서 보내는 데이터 전송 속도를 강제로 조절
+- 제어 방법
+![traffic](../image/network_trafficcontrol.png)
+1. Slow Start: 처음 시작 시 패킷이 문제없이 도착할 때마다 Window size를 지수적으로 증가, 혼잡이 발생했던 window size의 절반까지 늘림
+![retransmit](../image/network_retransmit.png)
+2. Fast Retransmit: 패킷이 손실되면 중복된 ACK를 보내고 이것이 3번 반복 시 손실된 것으로 간주하고 서버 측에서 즉시 손실로 간주된 패킷 재전송
+3. Fast Recovery: 혼잡 상태가 될 시 window size를 절반으로 줄임
+
+### UDP
+![udp](../image/network_udp.png)
+- 비연결 지향형 프로토콜로 데이터 전송을 보장하지 않음
+- 제어를 지원 안함
+- DNS, 온라인 게임, 스트리밍 서비스 등에 사용
+
+#### 왜 사용하는가?
+- TCP에 비해 단순, 연결 설정이 없어 오버헤드가 적음
+
+![udpheader](../image/network_udpheader.png)
+- Header 구성이 간단해서 필요한 부분은 개발자가 직접 구성 가능
+- 주로 신뢰성보다 연속성/속도가 훨씬 중요한 분야에서 사용
