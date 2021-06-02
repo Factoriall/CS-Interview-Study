@@ -158,6 +158,7 @@
 ### TCP
 
 ![tcp](../image/network_tcppacket.png)
+
 - 연결지향형 프로토콜
   + 가상 회선 패킷 교환 방식 사용
   + 순서 보장
@@ -174,6 +175,7 @@
 - 3-way handshaking 및 4-way handshaking으로 구분
 
   + 3-Way Handshaking
+
 ![3wayHandshaking](../image/network_3wayhandshaking.png)
 
   + 초기 연결을 설정 시 사용
@@ -184,6 +186,7 @@
   4. 서버가 수신한 후에 연결 설정
 
   + 4-Way Handshaking
+
 ![4wayHandshaking](../image/network_4wayhandshaking.png)
 
   - 연결을 해제할 시 사용
@@ -203,6 +206,7 @@
 
 #### 오류 제어
 - 데이터 처리 시 발견되는 오류를 처리하고 재전송 작업을 줄이기 위한 제어 과정
+
 ![error](../image/network_errorcontrol.png)
 
 1. Stop and Wait: 매번 전송 패킷에 대한 확인 응답을 받아야 그 다음의 패킷 전달
@@ -218,11 +222,14 @@
 1. Slow Start: 처음 시작 시 패킷이 문제없이 도착할 때마다 Window size를 지수적으로 증가, 혼잡이 발생했던 window size의 절반까지 늘림
 
 ![retransmit](../image/network_retransmit.png)
+
 2. Fast Retransmit: 패킷이 손실되면 중복된 ACK를 보내고 이것이 3번 반복 시 손실된 것으로 간주하고 서버 측에서 즉시 손실로 간주된 패킷 재전송
 3. Fast Recovery: 혼잡 상태가 될 시 window size를 절반으로 줄임
 
 ### UDP
+
 ![udp](../image/network_udp.png)
+
 - 비연결 지향형 프로토콜로 데이터 전송을 보장하지 않음
 - 제어를 지원 안함
 - DNS, 온라인 게임, 스트리밍 서비스 등에 사용
@@ -231,5 +238,6 @@
 - TCP에 비해 단순, 연결 설정이 없어 오버헤드가 적음
 
 ![udpheader](../image/network_udpheader.png)
+
 - Header 구성이 간단해서 필요한 부분은 개발자가 직접 구성 가능
 - 주로 신뢰성보다 연속성/속도가 훨씬 중요한 분야에서 사용
