@@ -58,3 +58,33 @@
 5. 완료(Committed): 트랜잭션이 성공적으로 수행되어 Commit이 실행된 상태
 
 ## DB 인덱스
+### Index
+
+![index](../image/database_index.png)
+
+- DBMS 내 데이터 접근을 용이하게 하는 자료구조
+- 항상 정렬된 상태를 유지해서 값 탐색 속도가 빠름
+- 값을 수정할 시 정렬 순서도 바꿔야 하기 때문에 쿼리문 실행 속도가 느림
+
+#### 한계
+1. 별도의 저장공간 필요
+2. Index 생성을 위한 추가적인 작업 필요
+3. 수정이 잦을 경우 overhead 발생
+
+### B+-tree
+#### B-tree
+
+![btree](../image/database_btree.png)
+
+- Root, Branch, Leaf 노드들로 구성, key 및 data 저장
+- 노드 하나에 2개 이상의 자식 노드 저장
+- Balanced Tree, 균형이 깨질 시 이를 조정하는 작업 존재
+- 높이가 일정하기 때문에 탐색 시 항상 O(logN)을 만족
+
+#### B+tree
+
+![b+tree](../image/database_b+tree.png)
+
+- B-tree를 적절히 개선한 버전
+- Leaf 노드에서만 data 저장, 그 위에는 key만 저장
+- Leaf 노드들을 Linked List로 연결하여 순차 검색에 용이
