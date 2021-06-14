@@ -6,7 +6,7 @@
 - [목적](#목적)
 - [기본 CS 지식](#기본-CS-지식)
   * [Network](./Network/README.md)
-  * [Database](./Database/README.md) - 정리 중
+  * [Database](./Database/README.md)
   * [OS](./OS/README.md) - 정리 중
   * [Data Structure](./DataStructure/README.md) - 정리 중
   * [Algorithm](./Algorithm/README.md) - 정리 중
@@ -28,11 +28,13 @@
 + TCP vs UDP
 
 ### Database [Link](./Database/README.md)
++ 데이터베이스
 + 트랜잭션
 + DB 인덱스
 
 ### OS [Link](./OS/README.md)
-+ Thread / Process + PCB
++ Process + PCB / Thread
+  * Multi-Thread vs Multi-Process
 + Synchronization
 + DeadLock
 + OSI 7계층
@@ -40,7 +42,10 @@
 ### Data Structure [Link](./DataStructure/README.md)
 + Map VS HashMap
 + List VS Array
+  * 단방향 vs 양방향 linked-list
 + Stack VS Queue
+  * Stack 2개로 Queue 구현
+
 
 ### Algorithm [Link](./Algorithm/README.md)
 + Sorting
