@@ -5,7 +5,14 @@
   * Thread
   * Multi-Thread vs Multi-Process
 + [Synchronization](#Synchronization)
+  - 뮤텍스
+  - 세마포어
+  - 스핀락
+  - 모니터
 + [DeadLock](#DeadLock)
++ 메모리 관리 기법
+  - [페이징](#페이징)
+  - [세그멘테이션](#세그멘테이션)
 + [OSI 7계층](#OSI-7계층)
 
 ## Process VS Thread
@@ -75,7 +82,62 @@
 - 상황에 따라(안전 vs 속도) 적절한 동작 방식을 선택할 필요.
 
 ## Synchronization
+### 정의
+- 여러 프로세스 or 스레드가 공유하는 **자원의 일관성**을 유지하기 위한 활동
+- 동기화가 없다면 Race Condition(2개 이상의 프로세스가 공통 자원을 병행하면서 읽을 시 순서에 따라 결과가 달라지는 현상)이 발생해 일관성이 깨진다.
+
+### 임계 영역
+- Critical Section: 실행 코드 중에 공유 데이터로 접근하는 코드
+- 이 부분을 **동기화**를 통해 일관성을 유지시켜야 한다
+- 임계 영역 문제 해결 충족 조건
+  1. Mutual Exclusion(상호 배제): 하나의 프로세스가 임계 영역에 있으면 다른 프로세스는 못 들어간다
+  2. Progress(진행): 임계 영역을 차지하는 프로세스가 없을 시 새로운 프로세스가 접근하면 들여보내준다
+  3. Bounded Waiting(유한 대기): 임계 영역에 접근 요청 후 이가 받아들여질 때 까지의 시간은 유한해야 함
+
+
+### 뮤텍스
+
+![mutex](../image/os_mutex.png)
+
+- MUTual EXclusion(상호 배제)의 약자
+- **오직 하나**의 프로세스(스레드)만이 동일 시점에서 뮤텍스를 얻어 임계 영역 입장
+- 임계 영역에 들어온 스레드만 락 해제 가능
+
+### 세마포어
+
+![semaphore](../image/os_semaphore.png)
+- Lock을 걸지 않은 스레드도 Signal을 보내 락 해제 가능
+- Wait & Signal 사용
+  + wait 호출 시 세마포어 카운트 1 내림
+  + signal 호출 시 카운트 1 증가
+  + 카운트가 0보다 작아질 시 lock 실행
+- 만약 초기 세마포어 카운트는 1로 설정 했을 시 뮤텍스와 같음, 즉 세마포어는 **뮤텍스가 될 수 있음**
+
+### 스핀락
+
+![spinlock](../image/os_spinlock.png)
+
+- 다른 스레드가 Lock 소유 시 Sleep 하는 대신 lock가 반환될 때까지 계속 확인
+- 보통 sleep하는 과정에서 context switching이 발생하므로 스핀락은 아주 작업에 대해 효율적이라 할 수 있음
+- 하지만 얻을 때 까지 계속 돌리므로 Busy Waiting 문제로 CPU 오버헤드가 발생할 수 있는 문제점
+
+### 모니터
+
+![monitor](../image/os_monitor.png)
+
+- 현재 많이 사용되고 있는 동기화 도구로, 세마포어보어 고수준 개념으로 알려져 있고 주로 Java에 사용됨
+- 배타 동기, 조건 동기 이 2가지 Queue를 가짐
+- 배타동기 Queue는 Synchronized 키워드를 통해 호출
+- 조건동기 Queue는 wait(), notify(), notifyAll()로 호출
+- 세마포어보다 코딩이 훨씬 쉬운데, 이는 항상 스레드가 들어오고 나가는 걸 명시해줘야하는 세마포어와 다르게 Synchronized 키워드만 붙이면 알아서 조절해준다.
+
 
 ## DeadLock
+
+## 메모리 관리 기법
+
+### 페이징
+
+### 세그멘테이션
 
 ## OSI 7계층

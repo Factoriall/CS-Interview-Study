@@ -37,6 +37,9 @@
   * Multi-Thread vs Multi-Process
 + Synchronization
 + DeadLock
++ 메모리 관리 기법
+  - 페이징
+  - 세그멘테이션
 + OSI 7계층
 
 ### Data Structure [Link](./DataStructure/README.md)
