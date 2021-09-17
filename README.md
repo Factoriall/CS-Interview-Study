@@ -40,6 +40,7 @@
 + 메모리 관리 기법
   - 페이징
   - 세그멘테이션
++ 가상 메모리
 + OSI 7계층
 
 ### Data Structure [Link](./DataStructure/README.md)
