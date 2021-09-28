@@ -10,6 +10,25 @@
 
 
 ## Manifest 파일
+- 앱에 대한 필수적인 정보를 안드로이드 Build Tool 및 Android OS, 그리고 구글 플레이에 제공하는 역할
+
+### 필수 선언 정보
+1. 앱의 패키지 이름
+- 용도
+  + 앱 리소스에 접근하는데 사용되는 R클래스 네임 스페이스
+  + Manifest 파일 내에 선언된 상대 경로에 적용
+    * <activity android:name=".MainActivity> 라고 선언했다면 이는 "com.ready.example.MainActivity" 를 가리킴
+2. 앱 컴포넌트들
+- Activity
+- Service
+- Broadcast Receiver
+- Content Provider
+3. 권한
+- 특정 시스템 기능을 사용할 때 요청하는 것
+4. 디바이스 특징
+- 앱이 필요로 하는 하드웨어 또는 소프트웨어 특징 명시
+- <uses-feature> 태그를 사용하면 명시
+- ex) 카메라 있는 기기에서만 다운로드 될 수 있게 설정 가능
 
 ## 4대 컴포넌트
 
@@ -33,7 +52,6 @@
 - **Background에서 특정 작업을 처리**하기 위해 사용하는 컴포넌트
 - 음원 스트리밍 노래를 들으면서 작업을 한다던가 등의 2개 이상의 작업을 동시에 해야 할 때 서비스 사용
 - **UI Thread에서 동작**, 별도 Thread를 생성해서 작업을 처리해야함
-
   + 네트워크 연동 가능
   + 별도 UI를 가지지 않고 Notification을 통해서 UI 표현 가능
   + 애플리케이션이 종료되도 이미 시작이 된 서비스는 Background에서 계속 동작
@@ -69,7 +87,7 @@
 - 이를 제어함으로써 비정상 종료 및 상태가 저장되지 않는 문제를 해결 가능
 
 ### Activity
-![components](../image/android_activitylifecycle.png)
+![activity](../image/android_activitylifecycle.png)
 
 1. OnCreate()
 - 시스템이 먼저 활동 생성 시 실행되는 것
@@ -101,9 +119,53 @@
 
 #### onSaveInstanceState() / onRestoreInstanceState()
 * 활동 정지 및 복구 시 상태 정보를 저장하는 메서드
+* onSaveInstanceState()는 onPause() 이전에 호출
 * onRestoreInstanceState()는 onStart() 직후에 호출
 
 ### Fragment
+![fragment](../image/android_fragmentlifecycle.png)
+
+1. onAttach()
+- Activity에 붙을 때 처음 호출
+
+2. onCreate()
+- 초기화해야 하는 리소스를 초기화 및 Fragment 생성
+- UI는 여기서 초기화되지 않는다.
+
+3. onCreateView()
+- Fragment의 View가 생성되는 부분
+- Layout을 inflate하는 부분
+
+4. onViewStateRestored()
+- Activity의 onCreate() 이후 호출
+- Activity 및 Fragment 뷰가 모두 생성된 상태로, view를 변경 가능하게 함
+
+5. onStart()
+- 유저에게 Fragment가 보이기 직전 호출
+- Activity onStart() 한 이후 호출
+
+6. onResume()
+- 유저와 상호작용하기 직전에 호출
+
+7. onPause()
+- Focus를 잃은 상태에서 호출, background 상태
+
+8. onStop()
+- 화면이 완전히 가려질 시 호출
+- 해당 액티비티를 재호출시 복원이 가능한 상태
+
+9. onSaveInstanceState()
+- 간단하고 가벼운 UI 상태를 저장
+- API 28+에만 onStop() 이후 생성, 이전 API는 onStop() 이전에 생성
+
+9. onDestroyView()
+- Fragment 관련 View 제거 때 호출
+
+10. onDestroy()
+- 완전히 종료
+
+11. onDetach()
+- Activity로부터 Fragment 해제 때 호출
 
 ### Service
 
