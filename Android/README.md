@@ -171,3 +171,30 @@
 
 
 ## Coroutine
+### 코루틴이란?
++ **협력형 멀티태스킹**
++ 동시성 프로그래밍 지원
++ 비동기 처리를 쉽게 도와줌
+
+### 간단한 설명
++ Co + routine
++ 보통 함수는 메인 루틴 및 서브 루틴으로 나뉘며 서브루틴은 1개의 입구 및 1개의 출구를 가짐
++ 코루틴 함수는 꼭 return 또는 닫는 괄호를 만나지 않더라도 **중간에 나갈 수 있음**.
+
+### 동시성 프로그래밍
+- 각자 다른 코드에 대해 조금씩 왔다갔다하면서 실행하는 개념
+- 아예 똑같이 수행한는 병렬성 프로그래밍과 다른 개념
+
+### Threading vs Coroutine
+- 공통점: 동시성(Concurrency) 보장
+- Threading
+  + Stack 영역에 적재
+  + OS Kernel을 통한 context switching을 통해 동시성 보장
+  + Blocking을 통해 다른 작업이 끝날 때 까지 스레드가 사용하지 못하게 방지
+- Coroutine
+  + Heap 영역에 적재
+  + 코딩을 통해 switching 시점을 정할 수 있음
+  + suspend될 시 실제로 스레드가 완전 Block된것이 아니기 때문에 같은 스레드에 다른 작업을 하는 것이 가능
+  + 다수 스레드가 동시에 수행된다면 context switching이 자주 일어나므로 단일 스레드에서 여러 coroutine object를 실행하는 것이 바랍직
+
+- 참고: https://aaronryu.github.io/2019/05/27/coroutine-and-thread/
