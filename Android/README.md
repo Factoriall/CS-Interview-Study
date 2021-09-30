@@ -197,4 +197,20 @@
   + suspend될 시 실제로 스레드가 완전 Block된것이 아니기 때문에 같은 스레드에 다른 작업을 하는 것이 가능
   + 다수 스레드가 동시에 수행된다면 context switching이 자주 일어나므로 단일 스레드에서 여러 coroutine object를 실행하는 것이 바랍직
 
+### 문법
+- GlobalScope: 프로그램 어디서나 제어 및 동작이 가능한 기능 범위
+- CoroutineScope: 특정 목적의 Dispatcher를 지정, 제어 및 동작이 가능한 범위
+  + Dispatcher.Default – 기본적인 백그라운드 동작
+  + Dispatcher.IO – I/O 최적화
+  + Dispatcher.Main – UI 스레드에서 동작
+- launch: 반환값이 없는 Job 객체
+- async: 반환값이 있는 deffered 객체
+- runblocking: 코루틴 함수가 종료될 때까지 메인 루틴을 잠시 대기
+- delay(millisecond: Long): 루틴 잠시 대기
+- Job.join(): Job의 실행이 끝날때까지 대기
+- Deffered.await(): defferd 실행이 끝날때까지 대기, 결과도 반환
+- cancel(): delay() 또는 yield()함수가 사용된 위치까지 수행된 뒤 종료
+suspend: suspend를 만나면 더 이상 아래 코드가 실행되지 않고 block 탈출
+
+
 - 참고: https://aaronryu.github.io/2019/05/27/coroutine-and-thread/
