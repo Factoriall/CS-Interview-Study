@@ -1,5 +1,6 @@
 # Database
 - [데이터베이스](#데이터베이스)
+- [E-R 모델](#E-R-모델)
 - [트랜잭션](#트랜잭션)
 - [DB 인덱스](#DB-인덱스)
 
@@ -27,6 +28,85 @@
 - 랜덤 I/O: 모든 블록을 차례로 접근
 
 -> **DB 쿼리 튜닝**: 랜덤 I/O 요청 횟수를 최소화시키는 과정
+
+## E-R 모델
+
+![ermodel](../image/database_ermodel.png)
+
+- 데이터를 개체(Entity), 속성(Attribute), 관계(Relation)로 나타내는 데이터 모델
+- Entity
+  + 단독으로 존재하는 객체, 다른 동일한 객체는 존재하지 않음
+    * 학생 정보가 학번, 이름, 학년이 있을 때, 3개의 정보가 모두 같은 학생이 오직 한 명이면 이를 Entity라고 정의
+  + Entity Type: 개체들의 집합, E-R 다이어그램에서 네모로 표현
+- Attribute
+  + 개체가 갖는 속성
+    * 학생 정보에서 학번/이름/학년 같은 정보
+  + E-R 다이어그램에서 원으로 표현
+- Relation
+  + Entity Type 간 관계
+    * 수강을 뜻하는 Takes는 학생과 과목 간의 "수강"이란 관계
+    * 이를 Relation Type이라 하며 Relation Type 역시 속성을 가짐
+
+### Attribute
+- Attribute Domain
+  + 해당 Attribute가 가질 수 있는 타입(Integer, String 등등)
+- Key Attribute
+  + 다른 객체들과 중복되지 않는 고유한 값을 가진 Attribute, 객체를 식별하는데 사용
+    * 학생 학번을 의미하는 Student_no는 고유번호, Key Attribute임
+  + ER 다이어그램에서 원에 밑줄로 표시
+- Composite Attribute(복합 애트리뷰트)
+  + 독립적인 Attribute들이 모여서 생성된 집합 Attribute
+
+  ![composite](../image/database_compositeAttribute.png)
+
+    * Address는 도, 시, 동, 아파트 이 4개의 Attribute가 모여서 생성된 Composite Attribute
+
+- Multi-Valued Attribute(다중값 애트리뷰트)
+  + 하나의 Attribute가 여러 개의 값을 가지는 Attribute
+    * 학생 전공의 경우 복수 전공을 하게 된다면 2개의 값이 생기므로 이 Attribute를 Multi-Valued Attribute라 불림
+  + ER 다이어그램에서 2개의 원으로 표현
+- Derived Attribute(유도된 애트리뷰트)
+  + 다른 Attribute가 가지고 있는 값으로부터 계산되어진 Attribute가
+    * total Attribute는 price * count의 값에서 나오는 값이므로 Derived Attribute
+  + ER 다이어그램에서 점선으로 된 원으로 표현
+
+### Relationship
+- Entity Type 간의 관계 표현
+1. 카디널리티 비율 제약 조건
+- 관계를 맺는 두 Entity Type에 대해 한 개체가 얼마나 많은 다른 개체와 관련될 수 있는지 나타내는 제약조건
+  * 일대일(1 : 1): 두 개 Entity Type의 개체들은 서로 일대일로 대응
+  * 일대다(1 : N): 하나의 개체가 다른 Entity Type의 많은 개체들과 관련되지만, 그 역은 성립하지 않음, 여기서 N은 많은 쪽에 달면 됨(children에)
+  * 다대다(N : M): 하나의 개체가 다른 Entity Type의 많은 개체들과 관련되며, 역이 성립
+- 여기서 대표 키를 통해 테이블 간의 관계를 맺음
+  * 댓글 테이블을 설계할 때, 댓글이 달리는 게시글 아이디를 같이 달아줘서 관계를 맺는데 이를 외래키(Foreign Key)라고 함.
+  * N:M의 경우 두 테이블 모두 서로의 Primary Key를 외래 키로 가지고 있음
+
+2. 참여 제약조건
+- 관계를 맺는 두 Entity Type에 대해 한 개체의 존재가 **다른 개체의 존재에 의존**하는지
+여부를 나타내는 제약조건
+  * 전체 참여: 하나 또는 그 이상의 개체가 참여
+  * 부분 참여: 선택 참여, 0개여도 가능
+
+  ![participation](../image/database_participation.png)
+
+  * 학생은 굳이 Course를 1개 이상 들을 필요는 없지만 Course는 학생이 있어야 존재
+- ER 다이어그램에서 전체 참여는 두 개의 실선, 부분 참여는 한 개의 실선.  
+
+3. 구조적 제약 조건
+- 위의 두 개의 제약조건을 합친 것
+- (MIN, MAX) 방식으로 두 제약 조건을 한번에 표시
+
+### Weak Entity & Identifying Relation Type
+- 약한 개체: 자신의 Key Attribute가 없는 Entity Type
+
+  ![weakentity](../image/database_weakentity.png)
+  * 분반의 경우 자신의 Key Attribute가 없고 강의 테이블에 의존적
+  * 부분 키(partial key): 약한 개체의 key
+    + 단독으로 존재할 수 없고 자신 소유하는 원래 entity type의 key와 합쳐서 표현
+    + 점선으로 된 밑줄로 표현
+  * Identifying Relationship Type(식별 관계성 타입): 약한 개체와 관계를 맺음
+    + ER 다이어그램에서 마름모 2개로 표현
+    + 약한 개체는 항상 의존적이므로 참여 제약 조건은 전체 참여
 
 ## 트랜잭션
 ### 정의
