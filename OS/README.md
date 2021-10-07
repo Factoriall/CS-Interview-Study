@@ -320,5 +320,3 @@
 
 5. MFU(Most Frequently Used) 페이지 교체
 - **참조 횟수가 많은** 페이지를 교체
-
-## OSI 7계층
