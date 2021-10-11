@@ -1,5 +1,6 @@
 # Android
 
+- [Kotlin/Java](#Kotlin/Java)
 - [Manifest 파일](#Manifest-파일)
 - [4대 컴포넌트](#4대-컴포넌트)
 - [LifeCycle](#LifeCycle)
@@ -7,7 +8,9 @@
   + Fragment
   + Service
 - [Coroutine](#Coroutine)
+- [Room](#Room)
 
+## Kotlin/Java
 
 ## Manifest 파일
 - 앱에 대한 필수적인 정보를 안드로이드 Build Tool 및 Android OS, 그리고 구글 플레이에 제공하는 역할
@@ -214,3 +217,79 @@ suspend: suspend를 만나면 더 이상 아래 코드가 실행되지 않고 bl
 
 
 - 참고: https://aaronryu.github.io/2019/05/27/coroutine-and-thread/
+
+## Room
+- **앱으로부터 SQLite를 편리하게 사용할 수 있도록 하는 안드로이드 아키텍쳐 컴포넌트**
+  + SQLite: 안드로이드에 기본 탑재된 내부 DB
+  + 장점
+    * 크기가 작음
+    * 오픈 소스
+    * **로컬**에서의 간단한 DB 구성
+- 객체와 관계형 DB를 매핑(ORM)
+- 구성 요소
+
+![room](../image/android_room.png)
+
+1. Entity: **DB 내의 테이블**, DB에 저장할 데이터 형식 정의
+2. DAO(Data Access Object): DB에 접근하여 **수행할 작업**을 메소드 형태로 정의
+3. Room Database: **DB의 전체적인 소유자** 역할, DB를 생성 및 버전 관리
+
+- SQLite DB 라이브러리와 비교 장점
+1. 컴파일 도중 SQL에 대한 유효성 검사 기능
+2. Schema가 변경 시 자동 업데이트
+3. 데이터 객체 변경을 위해 ORM 라이브러리 통해 매핑
+4. LiveData 및 RxJava/Coroutine을 이용해 생성 가능
+
+- 구현 코드
+1. Entity
+~~~java
+@Entity(tableName = "Raid")
+data class Raid (
+        @PrimaryKey(autoGenerate = true) var raidId: Int,
+        @ColumnInfo(name = "raidName") var raidName: String,
+        @ColumnInfo(name = "raidThumbnail") var raidThumbnail: String,
+        @ColumnInfo(name = "startDate") var startDate: Date,
+        @ColumnInfo(name = "endDate") var endDate: Date,
+        @Ignore var bosses : List<BossInRaid>
+        ){
+        constructor(raidName: String, raidThumbnail: String, startDate: Date, endDate: Date) :
+                this(0, raidName, raidThumbnail, startDate, endDate, Collections.nCopies(4, BossInRaid()))
+}
+~~~
+2. Dao
+~~~java
+@Dao
+interface RaidDao {
+  @Query("SELECT * FROM Raid")
+    fun getAll(): List<Raid>
+
+    @Query("SELECT * FROM Raid WHERE raidId IN (:raidIds)")
+    fun loadAllByIds(raidIds: IntArray): List<Raid>
+}
+~~~
+3. Room
+~~~java
+@Database(entities = [
+    Raid::class], version = 1, exportSchema = false)
+@TypeConverters(DataConverter::class)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun raidDao(): RaidDao
+
+    companion object {
+        private var INSTANCE: AppDatabase? = null
+
+        fun getInstance(context: Context): AppDatabase? {
+            if (INSTANCE == null) {
+                synchronized(AppDatabase::class) {
+                    INSTANCE = Room.databaseBuilder(context.applicationContext,
+                            AppDatabase::class.java, "database")
+                        .createFromAsset("database/database.db")
+                        .allowMainThreadQueries()
+                        .build()
+                }
+            }
+            return INSTANCE
+        }
+    }
+}
+~~~
