@@ -2,7 +2,7 @@
 
 - [객체지향 VS 절차지향](#객체지향-vs-절차지향)
 - [JVM & GC](#JVM-&-GC)
-- [Kotlin이 Java와 다른 점](#Kotlin이-Java와-다른 점)
+- [Kotlin이 Java와 다른 점](#Kotlin이-Java와-다른-점)
 - [SOLID](#SOLID)
 - [Overriding vs Overloading](#Overriding-vs-Overloading)
 - [Interface vs Abstract class](#Interface-vs-Abstract-class)
