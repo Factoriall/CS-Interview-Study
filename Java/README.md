@@ -1,7 +1,8 @@
-# JAVA
+# JAVA/Kotlin
 
 - [객체지향 VS 절차지향](#객체지향-vs-절차지향)
 - [JVM & GC](JVM-&-GC)
+- [Kotlin이 Java와 다른 점](#Kotlin이-Java와-다른 점)
 - [SOLID](SOLID)
 - [Overriding vs Overloading](Overriding-vs-Overloading)
 - [Interface vs Abstract class](Interface-vs-Abstract-class)
@@ -9,7 +10,7 @@
 ## 객체지향 VS 절차지향
 
 ### 절차 지향
-- 순차적인 처리가 중요시되는 프로그래밍 ex) C언어
+- **순차적인 처리**가 중요시되는 프로그래밍 ex) C언어
 - 장점
   * 하드웨어 작업 처리 방식과 유사하기 때문에 시간적으로 유리
 - 단점
@@ -30,7 +31,7 @@
 3. 다형성
   + 하나의 객체가 여러 가지 타입을 가질 수 있는 것
   + 부모 클래스 타입의 참조 변수로 자손 클래스의 인스턴스를 참조
-``` java
+~~~java
 class Parent { ... }
 class Child extends Parent { ... }
 ...
@@ -40,8 +41,7 @@ Parent pc = new Child();  // 허용
 Child cp = new Parent();  // 오류 발생.
 pa = ch;//
 ch = (Child)pa; //부모는 타입변환 생략 가능
-
-```
+~~~
 
 ## JVM & GC
 ### JVM
@@ -58,8 +58,75 @@ ch = (Child)pa; //부모는 타입변환 생략 가능
 4. 로딩된 파일들은 Execution Engine을 통해 해석
 5. 해석된 바이트 코드는 Runtime Data Areas에 배치되어 실질적 수행
 
-## SOLID
+### Garbage Collection
+- 불필요한 메모리를 알아서 정리해주는 용도
+- C언어의 free()를 Java/Kotlin에서 필요없게 해준다
 
+#### Minor GC
+- 일회성 구역
+- Young Generation: 새롭게 생성된 객체가 할당되는 영역
+- 동작방식
+  1. Eden 영역(새로 생성 객체가 할당되는 구역)이 꽉 찰 시 사용되지 않은 영역 삭제 및 남은 것 Survivor 영역으로 이동
+  2. Survivor 영역이 찰 시 이 중 살아남은 영역을 다른 영역으로 옮기고 나머지 삭제
+  3. 계속 살아남은 객체는 Old 영역으로 이동(Promotion)
+- 실행속도가 빠름
+
+### Major GC
+- Old Generation: Young 영역에서 Reachable 상태를 유지해 살아남은 객체가 복사되는 영역
+- 동작 방식
+  + Promotion이 지속적으로 발생해 Old 영역의 메모리가 부족할 시 발생
+  + Old 영역 메모리 정리
+- 실행속도가 느림
+
+## Kotlin이 Java와 다른 점
+- 특징
+  1. 정적 타입 언어
+    - 컴파일 시 변수의 자료형이 결정
+  2. Java와 100% 호환
+  3. Null Safety
+    - NPE 방지
+    - ? 및 !!를 활용해서 Nullable 및 Non-null 판별
+  4. Immutable
+    - val: Immutable, 할당 후 변경 불가
+    - var: Mutable, 언제든 변경 가능
+  5. 코드의 간결성
+    - getter(), setter() 등의 보일러 플레이트 코드 최소화
+  6. 함수형 프로그래밍
+    - 함수가 일급 객체로 사용
+
+    ~~~kotlin
+    fun add(a: Int, b: Int) = a + b
+    fun subtract(a: Int, b: Int) = a - b
+    fun main() {
+        val functions = mutableListOf(::add, ::subtract)
+        //함수를 객체처럼 사용해 mutableList의 class로 지정
+
+        println(functions[0])
+        // fun add(kotlin.Int, kotlin.Int): kotlin.Int
+
+        println(functions[0](12, 30))
+        // 12+30 = 42
+
+        println(functions[1](57, 12))
+        // 57-15 = 42
+    }
+    ~~~
+    - 람다 식을 통해 선언되지 않고도 익명 함수 기능에 전달
+
+    ~~~kotlin
+    fun calculator(a: Int, b: Int, sum: (Int, Int) -> Int): Int {
+        return a + b + sum(a, b)
+    }
+    fun main() {
+        val out = calculator(11, 10, { a, b -> a + b })
+        // calculator(11, 10) { a, b -> a + b } 와 동일
+        // 11+10+(11+10) = 42
+    }
+    ~~~
+
+- 출처: https://velog.io/@beargu2/Kotlin-%ED%8A%B9%EC%A7%95
+
+## SOLID
 1.	SRP(Single Responsibiility Principle): 단일 책임 원칙
   - 클래스 및 메소드는는 단 하나의 목적으로 한다.
 2.	OCP(Open Closed Principle): 개방 폐쇠 원칙
@@ -100,3 +167,57 @@ fun function(val c: Int, val d : Float)
 ```
 
 ## Interface vs Abstract class
+
+### 추상 클래스
+- **미완성 설계도**
+- 선언부만 작성하고 구현부는 작성하지 않을 채 남겨 둔 것
+- abstract 키워드
+- 클래스는 abstract로 지정 시 new를 통해 직접 생성 불가능
+- 메서드에 구현 시 구현 부분은 없음, 자식 클래스에서 반드시 구현해야 함
+- 일반 메서드 및 멤버 변수를 구성원으로 가질 수 있음
+- 하나의 추상 클래스만 상속 가능
+- 코드
+~~~java
+public abstract class Player {
+    //멤버 변수 생성 가능
+    boolean pause;
+    int currentPos;
+
+    public Player() {
+        this.pause = false;
+        this.currentPos = 0;
+    }
+    // abstract 통해 생성, 이는 무조건 상속 받는 클래스에서 구현해야 한다
+    abstract void play(int pos);
+    abstract void stop();
+
+    //일반 메서드 구현 가능
+    void pause() {
+        if (pause) {
+            pause = false;
+            play(currentPos);
+        } else {
+            pause = true;
+            stop();
+        }
+    }
+}
+~~~
+
+### 인터페이스
+- **기본 설계도**
+- 그 자체로 사용되기 보다, 다른 클래스를 작성하는데 도움을 줄 목적으로 작성
+- 모든 멤버 변수는 public static final이어야 함
+- 일반 메서드 및 멤버 변수를 가질 수 없음
+- 여러 인터페이스 상속 가능
+- 코드
+~~~java
+public interface Movable {
+    void move(int x, int y);//메서드에 public abstract 생략
+}
+interface Attackable {
+    void attack(Unit u);
+}
+interface Fightable extends Movable, Attackable {//다중 상속 가능
+}
+~~~

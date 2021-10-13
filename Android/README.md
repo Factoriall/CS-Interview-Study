@@ -1,16 +1,16 @@
 # Android
 
-- [Kotlin/Java](#Kotlin/Java)
 - [Manifest 파일](#Manifest-파일)
 - [4대 컴포넌트](#4대-컴포넌트)
 - [LifeCycle](#LifeCycle)
   + Activity
   + Fragment
   + Service
+- [Fragment](#Fragment)
+- [RecyclerView](#RecyclerView)
+- [ViewPager](#ViewPager)
 - [Coroutine](#Coroutine)
 - [Room](#Room)
-
-## Kotlin/Java
 
 ## Manifest 파일
 - 앱에 대한 필수적인 정보를 안드로이드 Build Tool 및 Android OS, 그리고 구글 플레이에 제공하는 역할

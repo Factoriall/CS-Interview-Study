@@ -7,11 +7,11 @@
 - [기본 CS 지식](#기본-CS-지식)
   * [Network](./Network/README.md)
   * [Database](./Database/README.md)
-  * [OS](./OS/README.md) - 정리 중
-  * [Data Structure](./DataStructure/README.md) - 정리 중
-  * [Algorithm](./Algorithm/README.md) - 정리 중
+  * [OS](./OS/README.md)
+  * [Data Structure](./DataStructure/README.md)
+  * [Algorithm](./Algorithm/README.md)
 - [포트폴리오 관련 지식](#포트폴리오-관련-지식)
-  * [Java](./Java/README.md) - 정리 중
+  * [Java](./Java/README.md)
   * [Design Pattern(Head First Design Patterns 정리)](./DesignPattern/README.md) - 정리 중
   * [Android](./Android/README.md) - 정리 중
   * [사용 라이브러리](./Library/README.md) - 정리 중
@@ -23,6 +23,7 @@
 ## 기본 CS 지식
 
 ### Network [Link](./Network/README.md)
++ OSI 7계층
 + HTTP 관련: HTTP vs HTTPS / HTTP 1.1 vs 2.0 vs 3.0 / RESTful/ HTTP 응답코드
 + 웹브라우저에 google.com을 쳤을 때 일어나는 일
 + TCP vs UDP
@@ -41,7 +42,6 @@
   - 페이징
   - 세그멘테이션
 + 가상 메모리
-+ OSI 7계층
 
 ### Data Structure [Link](./DataStructure/README.md)
 + Map VS HashMap
@@ -49,7 +49,6 @@
   * 단방향 vs 양방향 linked-list
 + Stack VS Queue
   * Stack 2개로 Queue 구현
-
 
 ### Algorithm [Link](./Algorithm/README.md)
 + Sorting
