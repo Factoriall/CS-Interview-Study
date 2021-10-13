@@ -80,23 +80,22 @@ ch = (Child)pa; //부모는 타입변환 생략 가능
 
 ## Kotlin이 Java와 다른 점
 - 특징
-  1. 정적 타입 언어
-    - 컴파일 시 변수의 자료형이 결정
-  2. Java와 100% 호환
-  3. Null Safety
-    - NPE 방지
-    - ? 및 !!를 활용해서 Nullable 및 Non-null 판별
-  4. Immutable
-    - val: Immutable, 할당 후 변경 불가
-    - var: Mutable, 언제든 변경 가능
-  5. 코드의 간결성
-    - getter(), setter() 등의 보일러 플레이트 코드 최소화
-  6. 함수형 프로그래밍
-    - 람다식으로 선언되지 않고도 익명 함수기능에 식 전달 가능
-    - 함수가 일급 객체로 사용
-    - 예제
+1. 정적 타입 언어
+  - 컴파일 시 변수의 자료형이 결정
+2. Java와 100% 호환
+3. Null Safety
+  - NPE 방지
+  - ? 및 !!를 활용해서 Nullable 및 Non-null 판별
+4. Immutable
+  - val: Immutable, 할당 후 변경 불가
+  - var: Mutable, 언제든 변경 가능
+5. 코드의 간결성
+  - getter(), setter() 등의 보일러 플레이트 코드 최소화
+6. 함수형 프로그래밍
+  - 람다식으로 선언되지 않고도 익명 함수기능에 식 전달 가능
+  - 함수가 일급 객체로 사용
 
-    ~~~kotlin
+~~~kotlin
 fun add(a: Int, b: Int) = a + b
 fun subtract(a: Int, b: Int) = a - b
 fun main() {
@@ -112,9 +111,9 @@ fun main() {
     println(functions[1](57, 12))
     // 57-15 = 42
 }
-    ~~~
-    - 람다 식을 통해 선언되지 않고도 익명 함수 기능에 전달
-    ~~~kotlin
+~~~
+
+~~~kotlin
     fun calculator(a: Int, b: Int, sum: (Int, Int) -> Int): Int {
         return a + b + sum(a, b)
     }
@@ -123,7 +122,7 @@ fun main() {
         // calculator(11, 10) { a, b -> a + b } 와 동일
         // 11+10+(11+10) = 42
     }
-    ~~~
+~~~
 
 - 출처: https://velog.io/@beargu2/Kotlin-%ED%8A%B9%EC%A7%95
 
