@@ -1,11 +1,11 @@
 # JAVA/Kotlin
 
 - [객체지향 VS 절차지향](#객체지향-vs-절차지향)
-- [JVM & GC](JVM-&-GC)
+- [JVM & GC](#JVM-&-GC)
 - [Kotlin이 Java와 다른 점](#Kotlin이-Java와-다른 점)
-- [SOLID](SOLID)
-- [Overriding vs Overloading](Overriding-vs-Overloading)
-- [Interface vs Abstract class](Interface-vs-Abstract-class)
+- [SOLID](#SOLID)
+- [Overriding vs Overloading](#Overriding-vs-Overloading)
+- [Interface vs Abstract class](#Interface-vs-Abstract-class)
 
 ## 객체지향 VS 절차지향
 
@@ -92,27 +92,28 @@ ch = (Child)pa; //부모는 타입변환 생략 가능
   5. 코드의 간결성
     - getter(), setter() 등의 보일러 플레이트 코드 최소화
   6. 함수형 프로그래밍
+    - 람다식으로 선언되지 않고도 익명 함수기능에 식 전달 가능
     - 함수가 일급 객체로 사용
+    - 예제
 
     ~~~kotlin
-    fun add(a: Int, b: Int) = a + b
-    fun subtract(a: Int, b: Int) = a - b
-    fun main() {
-        val functions = mutableListOf(::add, ::subtract)
-        //함수를 객체처럼 사용해 mutableList의 class로 지정
+fun add(a: Int, b: Int) = a + b
+fun subtract(a: Int, b: Int) = a - b
+fun main() {
+    val functions = mutableListOf(::add, ::subtract)
+    //함수를 객체처럼 사용해 mutableList의 class로 지정
 
-        println(functions[0])
-        // fun add(kotlin.Int, kotlin.Int): kotlin.Int
+    println(functions[0])
+    // fun add(kotlin.Int, kotlin.Int): kotlin.Int
 
-        println(functions[0](12, 30))
-        // 12+30 = 42
+    println(functions[0](12, 30))
+    // 12+30 = 42
 
-        println(functions[1](57, 12))
-        // 57-15 = 42
-    }
+    println(functions[1](57, 12))
+    // 57-15 = 42
+}
     ~~~
     - 람다 식을 통해 선언되지 않고도 익명 함수 기능에 전달
-
     ~~~kotlin
     fun calculator(a: Int, b: Int, sum: (Int, Int) -> Int): Int {
         return a + b + sum(a, b)
