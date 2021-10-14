@@ -201,8 +201,9 @@
 - 자원에 대한 행위는 HTTP Method로 표현
   + GET: URI가 가진 정보를 검색하고 응답
   + POST: 요청된 자원 생성, 새로 작성된 리소스의 경우 HTTP 헤더 항목에 Location: URI 포함
-  + PUT: 요청된 자원을 수정
   + DELETE: 요청된 자원을 삭제 요청
+  + PUT: 요청된 자원을 모든 속성을 수정
+  + PATCH: 리소스의 일부분만 수정
 2. 메세지의 경우 Header와 Body를 명확히 분리
 - 보낼 Entity 정보는 Body, API 버전 정보 및 응답받고자하는 MIME 타입 등은 Header에 담기
 3. API 버전 관리

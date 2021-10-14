@@ -42,6 +42,7 @@ Child cp = new Parent();  // 오류 발생.
 pa = ch;//
 ch = (Child)pa; //부모는 타입변환 생략 가능
 ~~~
+- 자바를 사용하는 이유: 종속성이 없음. C/C++은 속도가 빠르나 윈도우 등의 OS에 종속적인데 자바는 JVM으로 따로 관리하기 때문에 종속성이 없음.
 
 ## JVM & GC
 ### JVM
@@ -221,3 +222,7 @@ interface Attackable {
 interface Fightable extends Movable, Attackable {//다중 상속 가능
 }
 ~~~
+
+## Git vs SVN
+- Git: 분산 관리, local에서도 관리 가능
+- SVN: 중앙 집중 관리, commit 시 모든 공유 폴더에 적용
