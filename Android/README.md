@@ -5,12 +5,13 @@
 - [LifeCycle](#LifeCycle)
   + Activity
   + Fragment
-  + Service
 - [Fragment](#Fragment)
-- [RecyclerView](#RecyclerView)
-- [ViewPager](#ViewPager)
 - [Coroutine](#Coroutine)
+  + Thread vs Coroutine
+  + Handler / Looper
 - [Room](#Room)
+- [Retrofit](#Retrofit)
+- [Glide](#Glide)
 
 ## Manifest 파일
 - 앱에 대한 필수적인 정보를 안드로이드 Build Tool 및 Android OS, 그리고 구글 플레이에 제공하는 역할
@@ -170,9 +171,6 @@
 11. onDetach()
 - Activity로부터 Fragment 해제 때 호출
 
-### Service
-
-
 ## Coroutine
 ### 코루틴이란?
 + **협력형 멀티태스킹**
@@ -198,7 +196,7 @@
   + Heap 영역에 적재
   + 코딩을 통해 switching 시점을 정할 수 있음
   + suspend될 시 실제로 스레드가 완전 Block된것이 아니기 때문에 같은 스레드에 다른 작업을 하는 것이 가능
-  + 다수 스레드가 동시에 수행된다면 context switching이 자주 일어나므로 단일 스레드에서 여러 coroutine object를 실행하는 것이 바랍직
+  + 다수 스레드가 동시에 수행된다면 context switching이 자주 일어나므로 단일 스레드에서 여러 coroutine object를 실행하는 것이 바람직
 
 ### 문법
 - GlobalScope: 프로그램 어디서나 제어 및 동작이 가능한 기능 범위
@@ -217,6 +215,8 @@ suspend: suspend를 만나면 더 이상 아래 코드가 실행되지 않고 bl
 
 
 - 참고: https://aaronryu.github.io/2019/05/27/coroutine-and-thread/
+
+### Handler/Looper
 
 ## Room
 - **앱으로부터 SQLite를 편리하게 사용할 수 있도록 하는 안드로이드 아키텍쳐 컴포넌트**
@@ -293,3 +293,76 @@ abstract class AppDatabase : RoomDatabase() {
     }
 }
 ~~~
+
+
+## Retrofit
+- TypeSafe한 HttpClient 라이브러리
+  + 네트워크로부터 전달된 데이터를 App에서 필요한 형태의 객체로 받을 수 있음
+- 사용하는 이유
+  + HTTP 개발 시 **연결, 캐싱, 실패 요청 재시도, 스레딩, 응답 분석, 오류 처리** 등을 고려해야 됨
+  + 이를 Retrofit는 다 처리해준다!
+
+- 필요 코드
+1. API Interface: 어떠한 요청을 보낼 것인지에 대한 메서드 정의
+2. Retrofit 객체: client 지정 및 보낼 주소, 데이터 파싱 라이브러리 등 추가
+3. 이들을 이용해 call.enqueue 로 요청을 보내고 response를 받음
+
+## Glide
+- 이미지 로딩 라이브러리
+- gif, video 로딩 가능
+- 빠른 로딩을 위해 내부적으로 cache를 가짐
+- httpUrlConnection 라이브러리 기반
+- 구조
+
+![glide](../image/android_glide.png)
+
+1. 요청 데이터가 캐시 메모리에 저장되어있는지 확인. 한번 이상 로딩 시 캐시에 저장되어 빠르게 이미지 로딩 가능
+2. 캐시에 저장되어있지 않을 시 Disk에서 확인, 여기서도 없으면 network 통신을 통해 얻어올 수 있음
+
+- Cache 관리
+  + skipMemoryCache(Boolean) : 로딩한 데이터를 캐시에 저장할지 여부를 판단
+  + diskCacheStrategy(DiskCacheStrategy) : 디스크 캐시 수행
+    * DiskCacheStrategy.None: 디스크 캐싱을 안함
+    * DiskCacheStrategy.SOURCE: 원본 이미지 캐싱
+    * DiskCacheStrategy.RESULT: 변형된 이미지 캐싱
+    * DiskCacheStrategy.ALL: 모든 이미지 캐싱(기본)
+
+- 사용법
+~~~java
+ImageView imageView = findViewById<>(R.id.image) // 이미지 뷰
+
+Glide.with(this).load("이미지 url...").into(imageView)
+~~~
+
+- 대표적인 함수
+  + override(): 이미지를 지정한 크기만큼 불러온다. 공간 절약에 사용
+  ~~~java
+  Glide.with(this)
+    .load("이미지 url...")
+    .override(이미지 사이즈) // ex) override(600, 200)
+    .into(imageView)
+  ~~~
+  + placeholder(): 이미지 로딩 중에 보여질 이미지를 정한다.
+  ~~~java
+  Glide.with(this)
+    .load("이미지 url...")
+    .placeholder(로딩 이미지) // ex) placeholder(R.drawable.loading)
+    .into(imageView)
+  ~~~
+  + error(): 로딩 실패 시 보여줄 이미지를 정한다.
+  ~~~java
+  Glide.with(this)
+    .load("이미지 url...")
+    .error(실패 이미지) // ex) error(R.drawable.error)
+    .into(imageView)
+  ~~~
+  + asGif(): GIF 이미지 로딩
+  ~~~java
+  Glide.with(this)
+    .load("이미지(GIF) url...")
+    .into(imageView)
+    .asGif() 
+  ~~~
+
+
+## 그외 나올만한 Android 질문 정리
