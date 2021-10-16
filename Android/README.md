@@ -6,12 +6,14 @@
   + Activity
   + Fragment
 - [Fragment](#Fragment)
+- [Service](#Service)
 - [Coroutine](#Coroutine)
   + Thread vs Coroutine
   + Handler / Looper
 - [Room](#Room)
 - [Retrofit](#Retrofit)
 - [Glide](#Glide)
+- [그외 나올만한 Android 질문 정리](#그외-나올만한-Android-질문-정리)
 
 ## Manifest 파일
 - 앱에 대한 필수적인 정보를 안드로이드 Build Tool 및 Android OS, 그리고 구글 플레이에 제공하는 역할
@@ -361,8 +363,9 @@ Glide.with(this).load("이미지 url...").into(imageView)
   Glide.with(this)
     .load("이미지(GIF) url...")
     .into(imageView)
-    .asGif() 
+    .asGif()
   ~~~
 
 
 ## 그외 나올만한 Android 질문 정리
+- SharedPreference
