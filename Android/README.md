@@ -122,7 +122,6 @@
 - 활동이 소멸되기 전에 호출
 - finish() 또는 구성 변경(기기 변경이나 멀티윈도우)로 인해 시스템이 일시적으로 활동이 소멸되는 경우 호출
 
-
 #### onSaveInstanceState() / onRestoreInstanceState()
 * 활동 정지 및 복구 시 상태 정보를 저장하는 메서드
 * onSaveInstanceState()는 onPause() 이전에 호출
@@ -172,6 +171,17 @@
 
 11. onDetach()
 - Activity로부터 Fragment 해제 때 호출
+
+## Fragment
+- 하나의 Activity가 여러개의 화면을 가지도록 고안된 View
+- 특징
+  + 액티비티를 분할해 화면의 한 부분 정의
+  + 다른 액티비티에서도 사용 가능
+  + layout, 동작 처리, 생명주기를 가지는 독립적 모듈
+
+## Service
+- Notification : https://gun0912.tistory.com/77
+- Service 바인딩: https://bitsoul.tistory.com/149
 
 ## Coroutine
 ### 코루틴이란?
