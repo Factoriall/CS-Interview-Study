@@ -76,21 +76,29 @@ int[] selectionSort(int[] arr){
 - 시간 복잡도
   + 최선: O(N)
   + 최악: O(N^2)
+- 수도 코드
+~~~
+InsertionSort(A,n) // sort A[1...n]
+    for j <- 2 to n
+        do key <- A[j]
+            i <- j-1
+            while i>0 and A[i]>key
+                do A[i+1] <- A[i]
+                    i <- i-1
+            A[i+1] <- key
+~~~
 - 코드
 ~~~java  
 int[] insertionSort(int[] arr){
     int n = arr.length;
     for(int i=1; i<n; i++){
       int swp = arr[i];
-      int j=0;
-      while(j < i && arr[j] < swp){
-        j++;
+      int j=i-1;
+      while(j >= 0 && arr[j] > swp){
+        arr[j+1] = arr[j]
+        j--;
       }
-      if(j != 0){
-        int tmp = arr[j-1];
-        arr[j-1] = arr[i];
-        arr[i] = arr[j-1];
-      }
+      arr[j+1] = swp;
     }
     return arr;
 }
@@ -129,8 +137,49 @@ int[] insertionSort(int[] arr){
 - 계속 데이터 절반을 쪼개서 분할한 후, 병합 시에 정렬.
 - 시간 복잡도: O(NlogN)
 - 정렬을 위해 데이터 전체 크기만한 메모리가 더 필요
+- 수도 코드
+~~~
+Merge Sort(A[], p, r) {
+  if(p<r) then {
+    q <- (p+q)/2;   
+    mergesort(A, p, q);
+    mergesort(A, q+1, r);    
+    merge(A, p, q, r);    
+  }
+}
+merge(A[], p, q, r) {
+  정렬되어 있는 두 배열 A[p...q]와 A[q+1...r]을 합하여
+  정렬된 하나의 배열 A[p...r]을 만든다.
+}
+~~~
 - 코드
 ~~~java
+static void mergeSort(int arr[], int s, int e) {
+		if(s + 1 < e) {
+			int mid = (s + e) / 2;
+			mergeSort(arr, s, mid);
+			mergeSort(arr, mid, e);
+			merge(arr, s, e);
+		}
+	}
+
+	static void merge(int arr[], int s, int e) {
+		int len = e - s;
+		int mid = (s + e) / 2;
+		int i = s;
+		int j = mid;
+		int k = 0;
+
+		int[] tmp = new int[len];
+		while(i < mid && j < e) {
+			if(arr[i] <= arr[j]) tmp[k++] = arr[i++];
+			else tmp[k++] = arr[j++];
+		}
+
+		int rem = i >= mid ? j : i;
+		while(k < len) tmp[k++] = arr[rem++];
+		for(int t=s; t<e; t++) arr[t] = tmp[t - s];
+	}
 ~~~
 
 ### 퀵 정렬
@@ -143,37 +192,55 @@ int[] insertionSort(int[] arr){
   + 평균: O(NlogN)
   + 최악: O(N^2)
 - 최악의 경우가 되는 경우가 거의 없는지라, 가장 많이 사용되는 정렬 알고리즘
-- 코드
+- 수도 코드
+~~~
+quickSort(A[], p, r) {
+    if(p<r) then{
+        q = partition(A, p, r);    // 분할
+        quickSort(A, p, q-1);    // 왼쪽 부분배열 정렬
+        quickSort(A, q+1, r);    // 오른쪽 부분배열 정렬
+    }
+}
+Partition(A, p, r){
+    x<-A[r];
+    i<-p-1;
+    for j<-p to r-1
+    if A[j] <= x then
+        i<-i+1;
+        exchange A[i] and A[j];
+    exchange A[i+1] and A[r];
+    return i+1;
+}
+~~~
+- 자바 코드
 ~~~java
 static void quickSort(int[] arr, int start, int end){
-		System.out.println(start + "~" + end);
-	    if(start + 1 >= end) return;//만약 범위가 1 or 0면 종료
+  int pivot = arr[start];//pivot을 첫번째 원소로 잡음
+  int low = start + 1;//start 다음을 처음
+  int high = end - 1;//end는 닽지 않는 곳, -1 해줌
+  
+  while(low <= high){//
+    while(low < end && arr[low] <= pivot){
+      low++;
+    }
+    while(high > start && arr[high] >= pivot){
+      high--;
+    }
 
-	    int pivot = arr[start];//pivot을 첫번째 원소로 잡음
-	    int low = start + 1;//start 다음을 처음
-	    int high = end - 1;//end는 닿지 않는 곳, -1 해줌
+    if(low < high){
+      int tmp = arr[low];
+      arr[low] = arr[high];
+      arr[high] = tmp;
+    }
+  }
 
-	    while(low <= high){//교차할 때까지
-	      while(low < end && arr[low] <= pivot){
-	        low++;
-	      }//pivot보다 큰 지점
-	      while(high > start && arr[high] >= pivot){
-	        high--;
-	      }//pivot보다 작은 지점
+  int tmp = arr[start];
+  arr[start] = arr[high];
+  arr[high] = tmp;
 
-	      if(low <= high){
-	        int tmp = arr[low];
-	        arr[low] = arr[high];
-	        arr[high] = tmp;
-	      }//교차 안했으면 교체
-	    }
 
-	    int tmp = arr[start];
-	    arr[start] = arr[high];
-	    arr[high] = tmp;
-
-	    quickSort(arr, start, high);
-	    quickSort(arr, high+1, end);
+  quickSort(arr, start, high);
+  quickSort(arr, high+1, end);
 }
 ~~~
 
