@@ -78,6 +78,7 @@
   + SQLite DB/Web/파일 입출력을 통해 데이터 관리
   + 외부에서 실행 애플리케이션 내의 DB에 접근을 차단하면서 공유하고 싶은 데이터만 공개할 수 있게 도와줌
   + **용량이 큰 데이터**(음악, 사진 등)을 공유하는데 적합
+  + **Content Resolver**를 통해 Content Provider에 접근
   + 데이터 Read/Write 권한을 획득해야 애플리케이션 접근 가능
   + CRUD(Create, Read, Update, Delete) 원칙 준수
 
@@ -180,6 +181,46 @@
   + layout, 동작 처리, 생명주기를 가지는 독립적 모듈
 
 ## Service
+- 백그라운드에서 실행되는 동작이 필요할 때 사용.
+- LifeCycle
+
+![service](../image/android_servicelifecycle.jpg)
+
+- onCreate(): 최초에 한번만 실행
+- **onStartCommand()**: 다른 컴포넌트에서 startService() 호출 시 이 메서드 호출, 서비스 호출할 때마다 실행
+- onDestroy(): 서비스 종료 시 실행
+
+~~~kotlin
+override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+  Log.d("test", "서비스의 onStartCommand");
+  mp.start(); // 노래 시작
+  return super.onStartCommand(intent, flags, startId);
+}
+~~~
+- bindService(): 서비스와 액티비티가 서버-클라 역할을 하게 작동, service 내의 onBind()가 호출
+- Notification
+  + Notification Channel을 통해 Notification을 여러가지 용도로 나눠서 관리
+  + Android 8.0 이상은 무조건 Channel을 만들어줘야 한다.
+  + mediaSession: Notification의 control 담
+  + 코드 예시
+~~~kotlin
+val notification = notificationBuilder
+            .setSmallIcon(R.drawable.ic_music_note)
+            .setContentTitle(activeMusic.songName)
+            .setContentText(activeMusic.singerName)
+            .setLargeIcon(albumImage)
+            .addAction(notificationAction, "pause", actionIntent)
+            .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
+                .setShowActionsInCompactView(0)
+                .setMediaSession(mediaSession.sessionToken))
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setAutoCancel(false)
+            .setOngoing(true)
+            .build()
+notification.flags = FLAG_ONGOING_EVENT
+notificationManager.notify(NOTIFICATION_ID, notification)//실제 등록
+~~~
+
 - Notification : https://gun0912.tistory.com/77
 - Service 바인딩: https://bitsoul.tistory.com/149
 
@@ -229,6 +270,24 @@ suspend: suspend를 만나면 더 이상 아래 코드가 실행되지 않고 bl
 - 참고: https://aaronryu.github.io/2019/05/27/coroutine-and-thread/
 
 ### Handler/Looper
+- Thread 백그라운드 처리에 사용
+
+#### Handler
+- Handler는 Message 및 Runnable 객체 처리
+- Runnable은 run() 메서드로 처리, Message는 handleMessage() 메서드로 처리
+- Handler는 **의존적**. Message Queue 및 Looper가 필요
+
+#### Looper
+- 하나의 Looper는 하나의 스레드만 담당
+- 메세지가 들어오면 이 메세지를 꺼내 적절한 Handler로 전달
+
+#### 동작 과정
+
+![handlerlooper](../image/android_handlerlooper.png)
+
+1. Handler.sendMessage()를 통해 Message Queue에 저장
+2. Looper는 Message Queue에서 Loop()를 통해 반복 처리할 메세지를 Handler에 전달
+3. Handler는 handlerMessage를 통해 처리
 
 ## Room
 - **앱으로부터 SQLite를 편리하게 사용할 수 있도록 하는 안드로이드 아키텍쳐 컴포넌트**
@@ -376,6 +435,26 @@ Glide.with(this).load("이미지 url...").into(imageView)
     .asGif()
   ~~~
 
+- vs Picasso
+  + Picasso는 Bitmap 포맷을 **ARGB_8888**로 사용하고 Glide는 Bitmap포맷을 **RGB_565**를 사용
+    * RGB_565은 8888에 비해 화질은 떨어지지만 메모리 용량 50% 적게 사용
+  + Picasso는 **원본 이미지**를 메모리를 가져온 후에 GPU에 실시간 Resizing, Glides는 ImageView에 맞는 사이즈를 가져와 ImageView에 할당
+    * 만약 같은 이미지를 다른 사이즈로 여러번 로드한다면 Glide는 계속 다운로드 해야됨
+    * 대신 메모리 사용량이 적음  
+
 
 ## 그외 나올만한 Android 질문 정리
-- SharedPreference
+- SharedPreference: 복잡한 자료가 아닌 액티비티나 애플리케이션 등에서 사용하는 간단한 설정 값 등을 저장할 때 사용. 이를 이용해 간단한 변수를 액티비티 간에 전달도 가능
+- ANR: Application Not Responding
+  + 메인 스레드가 일정 시간 어떤 Task(이벤트: 5초, BroadcastReceiver: 10초)에 잡혀 있을 시 발생
+  + 예방 방법
+  1. 시간 소모가 많은 작업은 스레드로 처리
+  2. 사용자에게 progressBar등을 이용해 작업 진행과정 알리기
+- Vector과 Bitmap 이미지 차이
+  + Vector: 특정 해상도에 제한되지 않고 리사이징 되어도 깨지지 않는 이미지. Ex) SVG
+  + Bitmap: 픽셀로 구성, 특정 해상도에 제한됨. Ex) PNG, JPEG
+- Android Jetpack: 안드로이드 앱을 구축하는데 도움을 주는 라이브러리 모음, Room 등이 여기에 포함
+- Context: 애플리케이션 환경에 대한 글로벌 정보를 가지는 인터페이스
+  + Application Context: 싱글톤 오브젝트 생성 시 필요
+  + Activity Context: Activity 내에 유효한 Context
+- LayourInflator: XML로 정의된 자원들을 View형태로 바꿔주는 역할
