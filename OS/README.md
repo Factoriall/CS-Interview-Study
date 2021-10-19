@@ -4,6 +4,8 @@
   * Process + PCB
   * Thread
   * Multi-Thread vs Multi-Process
++ [스케쥴러](#스케쥴러)
++ [CPU 스케쥴러](#CPU-스케쥴러)
 + [Synchronization](#Synchronization)
   - 뮤텍스
   - 세마포어
@@ -65,6 +67,13 @@
   7. 입출력 상태 정보: 프로세스에 할당된 입출력 장치들 및 열린 파일 목록
   8. 어카운팅 정보: 사용된 CPI 시간, 시간 제한, 계정 정보 포함
 
+#### Context Switching
+
+![contextswitching](../image/os_contextswitching.png)
+
+- 문맥 교환
+- 이전 프로세스 상태를 PCB에 저장하고 또 다른 프로세스 정보를 메모리에 적재하는 과정
+
 ### 스레드(Thread)
 
 ![thread](../image/os_thread.png)
@@ -101,6 +110,80 @@
 #### 결론
 - **속도가 빠른 것이 중요시될 시 멀티스레딩** 이 더 좋지만 공유 자원에 여러 스레드가 접근하는 경우가 많은 경우 **오류가 발생할 가능성이 높아지므로 멀티 프로세스를 사용하는 것이 더 나을 수도** 있음.
 - 상황에 따라(안전 vs 속도) 적절한 동작 방식을 선택할 필요.
+
+## 스케쥴러
+- 프로세스를 스케쥴링하기 위한 Queue
+  + Job Queue(Pool): 현재 시스템 내에 있는 모든 프로세스 집합
+  + Ready Queue: 현재 메모리 내에 있으면서 CPU를 잡아 실행되기를 기다리는 프로세스 집합
+  + Device Queue(I/O Waiting queue): Device I/O 작업을 기다리는 프로세스 집합
+- 이러한 **Queue들에 프로세스를 넣고 빼는 작업**을 스케쥴러가 담당
+
+![scheduler](../image/os_scheduler.png)
+
+- 스케쥴러 종류
+1. Long-Term Scheduler
+- 메모리에 비해 많은 프로세스가 한꺼번에 올라올 경우 Job Queue에 저장한 후, 어떤 프로세스에 메모리를 할당해 Ready Queue에 보낼지 결정하는 역할
+
+2. Short-Term Scheduler
+- CPU와 메모리 사이 스케쥴링 담당
+- Ready Queuedp 있는 프로세스 중 어떤 프로세스를 running시킬지 결정
+- 프로세스에 CPU 할당
+
+3. Medium-term Scheduler
+- 여유 공간을 마련하기 위해 프로세스를 통째로 메모리에서 디스크로 쫓아내는 것 담당
+- 현 시스템에서 메모리에 너무 많은 프로그램이 동시에 올라가는 것을 조절
+
+![scheduleprocess](../image/os_scheduleprocess.jpg)
+
+## CPU 스케쥴러
+- 위의 단기 프로세스의 다른 이름
+- 스케쥴링 대상: Ready Queue에 있는 프로세스
+- 선점형(프로세스 CPU 강제로 뺏음)/비선점형(CPU를 획득한 프로세스가 스스로 반납할때 까지 CPU 안 뺏김)으로 나뉜다.
+- 디스패쳐: CPU 코어의 제어권을 CPU 스케쥴러가 선택한 프로세스에게 주는 모듈
+  + 한 프로세스에서 다른 프로세스로 Context Switching
+  + 사용자 모드로 전환
+
+### 스케쥴링 기준
+- 최대화: CPU Utilization(CPU 이용률) 및 Throughput(시간당 완료 프로세스 개수)을 최대화
+- 최소화: Turnaround Time(프로세스 실행 시간), Waiting Time(큐 대기 시간), Response Time(큐에 들어간 후 프로세스 종료까지 걸린 시간)
+- 위 기준이 제일 이상적이지만 대부분 알고리즘에 Trade-off가 존재.
+
+### 스케쥴링 알고리즘
+1. FCFS(First-Come-First-Served) 알고리즘
+- 먼저 온 순서대로 처리
+- 비선점형
+- 문제점: Convoy Effect, 소요시간이 긴 프로세스가 먼저 도달할 시 효율성이 낮음
+
+2. SJF(Shortest-Job-First) 알고리즘
+- 비선점형
+- 프로세스 종료 시 도착한 프로세스 중에서 CPU Burst Time이 가장 짧은 프로세스에 선 할당
+- 문제점: Startvation, 사용 시간이 긴 프로세스는 거의 영원히 CPU 할당 불가능
+
+3. SRTF(Shortest Remaining Time First) 알고리즘
+- 새로운 프로세스가 도착할 때마다 새로운 스케쥴링
+- 선점형, 현재 수행중인 프로세스의 남은 시간보다 더 짧은 CPU burst time을 가진 프로세스가 들어올 시 CPU를 뺏음
+- 문제점: Starvation 및 계속 스케쥴링을 하기 때문에 CPU 사용시간 측정이 힘듦
+
+4. Priority Scheduling
+- 우선순위가 가장 높은 프로세스에 CPU 할당
+- 작은 숫자가 우선순위가 높음
+- 선점형/비선점형 존재
+- 문제점: Starvation 및 무기한 봉쇄(실행 준비는 되어있으나 CPU를 사용 못하는 CPU가 무기한 대기)
+- 이에 대한 해결책: Aging - 우선순위가 낮은 프로세스도 시간이 지남에 따라 우선순위를 높임
+
+5. Round Robin
+- 현대적인 CPU 스케쥴링
+- 각 프로세스는 동일 크기의 할당시간을 가짐
+- 할당 시간이 지나면 프로세스는 선점 당하고 Ready Queue 맨 뒤로 이동
+- CPU 사용시간이 랜덤한 프로세스들이 섞여 있을 경우 효율 적
+- 프로세스는 Context를 save할 수 있어 가능
+- 장점
+  + Response Time이 빨라짐
+  + 모든 프로세스가 공정하게 받을 수 있음 
+- 단점
+  + 할당 시간이 너무 길 시 FCFS와 같아짐
+  + Context Switching 비용 존재
+
 
 ## Synchronization
 ### 정의
