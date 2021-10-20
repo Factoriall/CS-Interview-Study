@@ -6,7 +6,9 @@
   + Activity
   + Fragment
 - [Fragment](#Fragment)
+  + Activity와 비교했을 때 장단점
 - [Service](#Service)
+- [DP/DPI/PX](#DP/DPI/PX)
 - [Coroutine](#Coroutine)
   + Thread vs Coroutine
   + Handler / Looper
@@ -173,12 +175,19 @@
 11. onDetach()
 - Activity로부터 Fragment 해제 때 호출
 
+### Activity
+
 ## Fragment
 - 하나의 Activity가 여러개의 화면을 가지도록 고안된 View
 - 특징
   + 액티비티를 분할해 화면의 한 부분 정의
   + 다른 액티비티에서도 사용 가능
   + layout, 동작 처리, 생명주기를 가지는 독립적 모듈
+
+### Activity와 비교할 시 장단점
+- 장점
+  + Activity에 비해 상대적으로 가벼움
+  +
 
 ## Service
 - 백그라운드에서 실행되는 동작이 필요할 때 사용.
@@ -458,3 +467,14 @@ Glide.with(this).load("이미지 url...").into(imageView)
   + Application Context: 싱글톤 오브젝트 생성 시 필요
   + Activity Context: Activity 내에 유효한 Context
 - LayourInflator: XML로 정의된 자원들을 View형태로 바꿔주는 역할
+- Activity Stack: LIFO 구조로 Activity가 새로 호출될 때마다 쌓이는 Stack
+  + 관리 방법
+  1. LaunchMode 옵션
+    * standard: 여러 번 인스턴스 화 및 서로 다른 작업에 속함
+    * singleTop: 활동 인스턴스가 이미 현재 작업의 맨 위에 있으면 새로 올리지 않고 기존 인스턴스로 라우팅
+    * singleTask: 활동의 인스턴스가 Stack의 맨 아래에만 존재할 수 있음, 다른 액티비티를 쌓을 수 있다.
+    * singleInstance: 활동은 항상 자체 작업의 단 하나의 유일한 멤버, 다른 액티비티를 못 쌓음
+  2. Intent Flag
+    * FLAG_ACTIVITY_NEW_TASK: 위의 singleTask와 유사, 활동을 새 작업에서 시작
+    * FLAG_ACTIVITY_SINGLE_TOP: singleTop과 유사, 새로 부른 인스턴스가 가장 top에 있다면 기존 인스턴스 호출
+    * FLAG_ACTIVITY_CLEAR_TOP: 새로 부른 인스턴스가 이미 stack에 존재하면 그 인스턴스가 top이 될 때까지 스택 pop
