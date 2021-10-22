@@ -187,7 +187,13 @@
 ### Activity와 비교할 시 장단점
 - 장점
   + Activity에 비해 상대적으로 가벼움
-  +
+  + Activity Stack에서 쌓는 것보다 Fragment BackStack에서 관리하는게 메모리 및 화면 전환 시 효율적
+  + 재사용성 증가 - View를 분리해 다른 Activity에 사용 가능
+  + NavigationDrawer, BotoomSheetDialog 등 역동적이고 유연한 UI 지원
+  + 리눅스 커널 레벨을 통해 전달해야하는 Activity의 Intent 대신 AAC ViewModel/Listener Interface/Event Bus 등을 이용해 좀더 가볍게 공유가 가능.
+- 단점
+  + 또다른 Lifecycle 존재, 이를 Activity Lifecycle과 같이 관리하기 쉽지 않음
+  + FragmentManager Transaction을 직접 다루는 경우 비동기로 인해 예기치 않은 동작이 발생 가능
 
 ## Service
 - 백그라운드에서 실행되는 동작이 필요할 때 사용.
@@ -232,6 +238,21 @@ notificationManager.notify(NOTIFICATION_ID, notification)//실제 등록
 
 - Notification : https://gun0912.tistory.com/77
 - Service 바인딩: https://bitsoul.tistory.com/149
+
+## DP/DPI/PX
+- PX: 스크린의 실제 단위
+- DPI: Dot Per Inch, 1인치에 들어가는 픽셀을 나타내는 단위
+  + 예) 100dpi = 1인치당 픽셀이 100개 포함
+  + 개수가 많을수록 고밀도
+  + 1 dpi(120)/mdpi(160)/hdpi(240)/xhdpi(320)/xxdpi(480)/xxxdpi(640)
+- DP: 밀도 독립형 픽셀
+  + 밀도마다 적합한 pixel 수로 변환
+- SP: 확장 가능 픽셀
+  + 텍스트 크기를 정의
+  + 지정한 텍스트 및 밀도에 따라 크기 조절
+- DP & PX 변환
+  + PX = DP * (단말 DPI / 160)
+  + DP = PX * (160 / 단말 DPI)
 
 ## Coroutine
 ### 코루틴이란?
@@ -467,7 +488,7 @@ Glide.with(this).load("이미지 url...").into(imageView)
   + Application Context: 싱글톤 오브젝트 생성 시 필요
   + Activity Context: Activity 내에 유효한 Context
 - LayourInflator: XML로 정의된 자원들을 View형태로 바꿔주는 역할
-- Activity Stack: LIFO 구조로 Activity가 새로 호출될 때마다 쌓이는 Stack
+- Activity Stack(=Task): LIFO 구조로 Activity가 새로 호출될 때마다 쌓이는 Stack
   + 관리 방법
   1. LaunchMode 옵션
     * standard: 여러 번 인스턴스 화 및 서로 다른 작업에 속함
