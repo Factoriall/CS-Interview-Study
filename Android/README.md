@@ -184,13 +184,23 @@
   + 다른 액티비티에서도 사용 가능
   + layout, 동작 처리, 생명주기를 가지는 독립적 모듈
 
+### Transaction
+
+### add와 replace의 차이
+- add: 기존 fragments를 보존, back button을 누를 시 기존 fragment "onPause" 이후 상태가 되지 않고 새로운 fragment 추가, 기존 fragment가 active 상태를 유지
+- replace: 기존 fragment 제거 및 새로운 fragment 추가, back button을 누를 시 기존 fragment의 onCreateView가 호출  
+- BackStack: BeginTransaction부터 commit 까지의 전환 자체를 저장 
+  + addToBackStack: 백스택 생성, 없을 시 fragment를 옮겨다녀도 백버튼 한번에 앱 종료
+  + popBackStack: 해당 프래그먼크를 백스택에서 제거
+  + backStackEntryCount: 백스택 조회시 쌓여있는 개수
+
 ### Activity와 비교할 시 장단점
 - 장점
   + Activity에 비해 상대적으로 가벼움
   + Activity Stack에서 쌓는 것보다 Fragment BackStack에서 관리하는게 메모리 및 화면 전환 시 효율적
   + 재사용성 증가 - View를 분리해 다른 Activity에 사용 가능
   + NavigationDrawer, BotoomSheetDialog 등 역동적이고 유연한 UI 지원
-  + 리눅스 커널 레벨을 통해 전달해야하는 Activity의 Intent 대신 AAC ViewModel/Listener Interface/Event Bus 등을 이용해 좀더 가볍게 공유가 가능.
+  + 리눅스 커널 레벨을 통해 전달해야하는 Activity의 Intent 대신 AAC ViewModel/Listener Interface/Event Bus/bundle 등을 이용해 좀더 가볍게 공유가 가능.
 - 단점
   + 또다른 Lifecycle 존재, 이를 Activity Lifecycle과 같이 관리하기 쉽지 않음
   + FragmentManager Transaction을 직접 다루는 경우 비동기로 인해 예기치 않은 동작이 발생 가능
