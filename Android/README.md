@@ -15,6 +15,7 @@
 - [Room](#Room)
 - [Retrofit](#Retrofit)
 - [Glide](#Glide)
+- [AAC](#AAC)
 - [그외 나올만한 Android 질문 정리](#그외-나올만한-Android-질문-정리)
 
 ## Manifest 파일
@@ -189,7 +190,7 @@
 ### add와 replace의 차이
 - add: 기존 fragments를 보존, back button을 누를 시 기존 fragment "onPause" 이후 상태가 되지 않고 새로운 fragment 추가, 기존 fragment가 active 상태를 유지
 - replace: 기존 fragment 제거 및 새로운 fragment 추가, back button을 누를 시 기존 fragment의 onCreateView가 호출  
-- BackStack: BeginTransaction부터 commit 까지의 전환 자체를 저장 
+- BackStack: BeginTransaction부터 commit 까지의 전환 자체를 저장
   + addToBackStack: 백스택 생성, 없을 시 fragment를 옮겨다녀도 백버튼 한번에 앱 종료
   + popBackStack: 해당 프래그먼크를 백스택에서 제거
   + backStackEntryCount: 백스택 조회시 쌓여있는 개수
@@ -367,6 +368,7 @@ data class Raid (
                 this(0, raidName, raidThumbnail, startDate, endDate, Collections.nCopies(4, BossInRaid()))
 }
 ~~~
+
 2. Dao
 ~~~java
 @Dao
@@ -378,17 +380,17 @@ interface RaidDao {
     fun loadAllByIds(raidIds: IntArray): List<Raid>
 }
 ~~~
+
 3. Room
+
 ~~~java
 @Database(entities = [
     Raid::class], version = 1, exportSchema = false)
 @TypeConverters(DataConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun raidDao(): RaidDao
-
     companion object {
         private var INSTANCE: AppDatabase? = null
-
         fun getInstance(context: Context): AppDatabase? {
             if (INSTANCE == null) {
                 synchronized(AppDatabase::class) {
@@ -441,7 +443,6 @@ abstract class AppDatabase : RoomDatabase() {
 - 사용법
 ~~~java
 ImageView imageView = findViewById<>(R.id.image) // 이미지 뷰
-
 Glide.with(this).load("이미지 url...").into(imageView)
 ~~~
 
@@ -483,6 +484,101 @@ Glide.with(this).load("이미지 url...").into(imageView)
     * 대신 메모리 사용량이 적음  
 
 
+## AAC
+![aac](../image/android_aac.png)
+- Android Architecture Components
+- 앱 구조를 더 튼튼하고 모둘화된 코딩을 돕기 위해 설계
+- DataBinding, LiveData, ViewModel
+제공
+- MVVM 패턴 구조 설계에 최적화
+
+### MVVM
+
+![MVVM](../image/android_mvvm.png)
+
+- View는 ViewModel을 관찰, UI 갱신 역할에 충실
+- 장점
+  1. View가 데이터를 실시간으로 관찰, LiveData 사용시 자동으로 UI 변경
+  2. 생명주기로부터 안전
+  3. 역할 분리 및 모듈화
+- 단점
+  1. ViewModel 클래스 추가 필요, 이들을 서로 코딩하여 연결할 필요
+
+### ViewModel
+- 안드로이드의 **액티비티 생명주기에 분리**시켜 액티비티가 재실행되도 데이터가 소멸되지 않도록 조절.
+- Activity에서 onDestroy() 이후에만 소멸, 이 때문에 회전 등 액티비티가 재실행될 때 ViewModel을 사용하면 정보가 초기화되는 문제를 방지 가능
+- 생성 방법
+~~~kotlin
+ViewModelProvider.get(ChronometerViewModel::class.java)
+~~~
+
+### LiveData
+- Data의 변경을 **관찰**할 수 있는 Data Holder 클래스로, **안드로이드의 생명주기를 알고 있음**
+- Activity 및 Fragment에는 **LifeCyclerOwner**가 구현되어 있는데, 이를 observer로 등록해 lifecycle의 변화를 관찰 가능
+- 장점
+  1. UI와 데이터 상태 동기화가 간편함
+  2. 데이터 누수가 없음: 생명주기가 Destroy될 LiveData도 메모리 해체
+  3. 비활성 Activity에 의한 충돌이 없음: Observer 생명주기가 비활성일 시 이벤트 수신 X
+  4. 별도의 생명주기 관리 불필요: 생명주기에 대해 자동으로 관리
+  5. 항상 최신 데이터 유지: 비활성 -> 활성일 시 최신 데이터 수신
+  6. 리소스 공유: 여러 Activity, Fragment, Service에 LiveData 공유 가능.
+- onCreate에 하는 것이 바람직, 최신값을 받기 위해서
+- 보통 ViewModel과 같이 사용하는데, 액티비티와 데이터 간의 결합도를 낮추고, 오직 data민 display하는 것을 수행하는 아키텍쳐 패턴을 유지하기 위함
+- ViewModel과 LiveData 사용한 코드
+~~~kotlin
+class CounterViewModel : ViewModel() {
+    var counter = MutableLiveData<Int>()
+    fun increase() {
+        counter.value = counter.value!! + 1
+    }
+    fun decrease() {
+        counter.value = counter.value!! - 1
+    }
+    init {
+        counter.value = 0
+    }
+}
+~~~
+
+### DataBinding
+- 간단하게 xml 파일에 data을 연결해서 사용하는 것
+- Activity에 View들을 정의해서 사용할 필요가 없어짐
+- 데이터가 변할 시 따로 세팅할 필요 없음
+- 사용법
+  1. xml 파일에서 <layout>으로 감싼 후 data 정의
+  2. Activity에서 binding 세팅, 여기서 binding은 액티비티 xml 이름에 따라 달라짐
+  3. Activity 파일 수정, invalidateAll()로 view의 변화를 알려줌  
+- DataBinding 객체는 lifecyclerOwner 및 viewModel을 지정할 수 있어 LiveData 및 ViewModel을 효율적으로 사용 가능
+- 코드
+~~~kotlin
+  private lateinit var binding: ActivityMainBinding
+  private lateinit var viewModel: CounterViewModel
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+        //바인딩 세팅, xml에서 자동으로 세팅
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+    //이 객체가 이 액티비티의 라이프사이클을 참조하면서 데이터가 변경되거나 하면 refresh 시키겠다.
+    binding.lifecycleOwner = this
+
+    //ViewModel 가져오기
+    viewModel = ViewModelProvider(this).get(CounterViewModel::class.java)
+
+    binding.viewModel = viewModel
+  }
+~~~
+
+- xml 파일
+~~~
+//viewModel과 연결된 counter 값을 가져옴
+android:text="@{Integer.toString(viewModel.counter)}"
+//viewModel 안의 decrease 메서드를 가져옴
+android:onClick="@{() -> viewModel.decrease()}"
+~~~
+
+- 출처: https://junghun0.github.io/2019/05/22/android-viewmodel/
+
 ## 그외 나올만한 Android 질문 정리
 - SharedPreference: 복잡한 자료가 아닌 액티비티나 애플리케이션 등에서 사용하는 간단한 설정 값 등을 저장할 때 사용. 이를 이용해 간단한 변수를 액티비티 간에 전달도 가능
 - ANR: Application Not Responding
@@ -509,3 +605,17 @@ Glide.with(this).load("이미지 url...").into(imageView)
     * FLAG_ACTIVITY_NEW_TASK: 위의 singleTask와 유사, 활동을 새 작업에서 시작
     * FLAG_ACTIVITY_SINGLE_TOP: singleTop과 유사, 새로 부른 인스턴스가 가장 top에 있다면 기존 인스턴스 호출
     * FLAG_ACTIVITY_CLEAR_TOP: 새로 부른 인스턴스가 이미 stack에 존재하면 그 인스턴스가 top이 될 때까지 스택 pop
+- xml에서 merge와 include의 차이
+1. <include>
+  + 레이아웃을 여러파일로 나눠 복잡하거나 아주 긴 xml 파일 구성 시 도움
+  + id가 존재해서 이를 통해 view 정보를 받을 수 있음
+  + 다만 include시 이를 감싸줄 ViewGroup이 필요하기 때문에 뷰계층을 깊게 하여 부하를 일으킴
+2. <merge>
+  + ViewGroup이 필요없어 뷰계층이 깊어지지 않는다.
+  + ViewGroup이 없기 때문에 id 사용이 제한적
+  + 각 Activity 및 Fragment당 merge는 두번 이상 사용하면 안된다.
+- Executor: 스레드에서 직접적으로 다루는 가장 최상위 API
+  + 구성 요소: 스레드 풀, Bloacking Queue
+  + 스레드 풀을 통해 미리 스레드를 생성하고 관리, 생성 및 수거에 드는 비용 무시 가능
+  + task를 만드는 것과 실행 사이 분리
+  + 장점: 커플링 감소, 확장성, 메모리 참조 감소
