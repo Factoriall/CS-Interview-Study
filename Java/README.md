@@ -307,5 +307,3 @@ fun MutableList<Int>.swap(index1: Int, index2: Int) {
 
 ### 그 외
 - open 키워드: 상속 받을 때 부모 클래스를 명시하기 위해 사용. Kotlin은 자바와 다르게 final 키워드가 기본으로 달려있기 때문에 이를 붙여줘야 한다.
-- Git: 분산 관리, local에서도 관리 가능
-- SVN: 중앙 집중 관리, commit 시 모든 공유 폴더에 적용

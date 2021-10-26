@@ -11,10 +11,10 @@
   * [Data Structure](./DataStructure/README.md)
   * [Algorithm](./Algorithm/README.md)
 - [포트폴리오 관련 지식](#포트폴리오-관련-지식)
-  * [Java](./Java/README.md)
+  * [Java/Kotlin](./Java/README.md)
   * [Design Pattern(Head First Design Patterns 정리)](./DesignPattern/README.md) - 정리 중
   * [Android](./Android/README.md) - 정리 중
-  * [사용 라이브러리](./Library/README.md) - 정리 중
+  * [Git](./Git/README.md)
 - [참고 사이트](#참고-사이트)
 ---
 ## 목적
@@ -29,9 +29,12 @@
 + TCP vs UDP
 
 ### Database [Link](./Database/README.md)
-+ 데이터베이스
-+ 트랜잭션
-+ DB 인덱스
+- 데이터베이스
+- E-R 모델
+- DB Join
+- 트랜잭션
+- DB 인덱스
+- RDBMS vs NoSQL
 
 ### OS [Link](./OS/README.md)
 + Process + PCB / Thread
@@ -46,19 +49,14 @@
 ### Data Structure [Link](./DataStructure/README.md)
 + Map VS HashMap
 + List VS Array
-  * 단방향 vs 양방향 linked-list
 + Stack VS Queue
-  * Stack 2개로 Queue 구현
 
 ### Algorithm [Link](./Algorithm/README.md)
 + Sorting
-+ DFS / BFS
-+ 다익스트라
-+ MST
-+ DP / Bitmasking
+
 ---
 ## 포트폴리오 관련 지식
-### Java [Link](./Java/README.md)
+### Java/Kotlin [Link](./Java/README.md)
 + 객체지향 VS 절차지향
 + 객체지향 특징
 + JVM, GC 설명
@@ -69,18 +67,26 @@
 ### Design Pattern [Link](./DesignPattern/README.md)
 
 ### Android [Link](./Android/README.md)
-+ 매니페스트 파일
-+ 대표 컴포넌트
-+ Activity, Fragment - Lifecycle
-+ RecyclerView
-+ ViewPager
-+ Handler / Looper
-+ RxJava
+- Manifest 파일
+- 4대 컴포넌트
+- LifeCycle
+- Fragment
+- Service
+- DP/DPI/PX
+- Coroutine
+- Room
+- Retrofit
+- Glide
+- AAC
+- 그외 나올만한 Android 질문 정리
 
-### 라이브러리 [Link](./Library/README.md)
-+ Retrofit2
-+ POI
-+ MPAndroidChart
+### Git [Link](./Git/README.md)
+- Git branch 전략
+  + Github-Flow
+  + Git-Flow
+- Git vs SVN
+- merge vs rebase
+- Git cheatsheet
 
 ---
 ## 참고 사이트
