@@ -16,7 +16,17 @@
 - [Retrofit](#Retrofit)
 - [Glide](#Glide)
 - [AAC](#AAC)
+  + MVVM
+  + ViewModel
+  + LiveData
+  + DataBinding
 - [그외 나올만한 Android 질문 정리](#그외-나올만한-Android-질문-정리)
+  + SharedPreference
+  + ANR
+  + Context
+  + Jetpack
+  + Android Stack(Task)
+  + xml에서 merge와 include의 차이
 
 ## Manifest 파일
 - 앱에 대한 필수적인 정보를 안드로이드 Build Tool 및 Android OS, 그리고 구글 플레이에 제공하는 역할
@@ -36,7 +46,7 @@
 - 특정 시스템 기능을 사용할 때 요청하는 것
 4. 디바이스 특징
 - 앱이 필요로 하는 하드웨어 또는 소프트웨어 특징 명시
-- <uses-feature> 태그를 사용하면 명시
+- uses-feature 태그를 사용하면서 명시
 - ex) 카메라 있는 기기에서만 다운로드 될 수 있게 설정 가능
 
 ## 4대 컴포넌트
@@ -89,6 +99,9 @@
 - 컴포넌트 간 작업 수행을 위한 **정보 전달 통신수단**
 - 다른 컴포넌트에 액션, 데이터 전달
 - 인텐트를 통해 다른 애플리케이션의 컴포넌트 활성화 가능
+- 명시적 vs 암시적
+  + 명시적 Intent: 인텐트에 클래스 객체나 컴포넌트 이름 지정해 **호출할 대상을 확실히 알 수 있는 경우** 사용, 컴포넌트간 이동 시 사용
+  + 암시적 Intent: 액션 및 데이터를 지정했지만 **호출 대상이 달라질 수 있는 경우** 사용, pdf 파일을 열 시 사용할 애플리케이션 선택하는 창이 암시적 Intent를 통해 사용된다. 
 
 
 ## LifeCycle
@@ -305,7 +318,7 @@ notificationManager.notify(NOTIFICATION_ID, notification)//실제 등록
 - Job.join(): Job의 실행이 끝날때까지 대기
 - Deffered.await(): defferd 실행이 끝날때까지 대기, 결과도 반환
 - cancel(): delay() 또는 yield()함수가 사용된 위치까지 수행된 뒤 종료
-suspend: suspend를 만나면 더 이상 아래 코드가 실행되지 않고 block 탈출
+- suspend: suspend를 만나면 더 이상 아래 코드가 실행되지 않고 block 탈출
 
 
 - 참고: https://aaronryu.github.io/2019/05/27/coroutine-and-thread/
@@ -545,7 +558,7 @@ class CounterViewModel : ViewModel() {
 - Activity에 View들을 정의해서 사용할 필요가 없어짐
 - 데이터가 변할 시 따로 세팅할 필요 없음
 - 사용법
-  1. xml 파일에서 <layout>으로 감싼 후 data 정의
+  1. xml 파일에서 layout으로 감싼 후 data 정의
   2. Activity에서 binding 세팅, 여기서 binding은 액티비티 xml 이름에 따라 달라짐
   3. Activity 파일 수정, invalidateAll()로 view의 변화를 알려줌  
 - DataBinding 객체는 lifecyclerOwner 및 viewModel을 지정할 수 있어 LiveData 및 ViewModel을 효율적으로 사용 가능
@@ -606,11 +619,11 @@ android:onClick="@{() -> viewModel.decrease()}"
     * FLAG_ACTIVITY_SINGLE_TOP: singleTop과 유사, 새로 부른 인스턴스가 가장 top에 있다면 기존 인스턴스 호출
     * FLAG_ACTIVITY_CLEAR_TOP: 새로 부른 인스턴스가 이미 stack에 존재하면 그 인스턴스가 top이 될 때까지 스택 pop
 - xml에서 merge와 include의 차이
-1. <include>
+  1. include
   + 레이아웃을 여러파일로 나눠 복잡하거나 아주 긴 xml 파일 구성 시 도움
   + id가 존재해서 이를 통해 view 정보를 받을 수 있음
   + 다만 include시 이를 감싸줄 ViewGroup이 필요하기 때문에 뷰계층을 깊게 하여 부하를 일으킴
-2. <merge>
+  2. merge
   + ViewGroup이 필요없어 뷰계층이 깊어지지 않는다.
   + ViewGroup이 없기 때문에 id 사용이 제한적
   + 각 Activity 및 Fragment당 merge는 두번 이상 사용하면 안된다.

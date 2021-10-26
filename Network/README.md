@@ -180,36 +180,37 @@
 ---
 ## REST
 - 정의: REpresentational State Transfer)의 약자, World Wide Web 같은 분산 하이퍼미디어 시스템을 위한 SW 아키텍쳐의 한 형식
-- DB에 저장되어 있는 값을 json 등의 형태로 **리소스 값을 표현한 상태**
-
-### 특징
-1. Uniform: 특정한 인터페이스 사용
-2. Stateless: 상태를 따로 저장 및 관리하지 않음
-3. Cacheable: HTTP가 가지는 캐싱을 활용 가능
-4. Self-Descriptiveness: REST API 메세지만 보고도 쉽게 이해가 가능한 자체 표현 구조로 표현
-5. Client-Server: 서버에서 API 제공, 클라이언트는 사용자 인증 및 컨텍스트를 직접 관리하눈 구조
-6. Hierachical Structure: 다층 계층으로 구성 가능, 보안 및 암호화 계층 추가 및 네트워크 기반의 중간 매체를 활용 가능
+- **자원의 대표를 통한 상태 전달**
+- **HTTP URI를 통해 자원을 명시**하고 **HTTP Method를 통해 해당 자원에 대한 CRUD Operation을 적용**하는 것을 의미
+- HTTP Method 종류
+  + GET: URI가 가진 정보를 검색하고 응답(Read)
+  + POST: 요청된 자원 생성, 새로 작성된 리소스의 경우 HTTP 헤더 항목에 Location: URI 포함(Create)
+  + DELETE: 요청된 자원을 삭제 요청(Delete)
+  + PUT: 요청된 자원을 모든 속성을 수정(Update)
+  + PATCH: 리소스의 일부분만 수정(Update)
+- 특징
+  1. Uniform: 특정한 인터페이스 사용
+  2. Stateless: 상태를 따로 저장 및 관리하지 않음
+  3. Cacheable: HTTP가 가지는 캐싱을 활용 가능
+  4. Self-Descriptiveness: REST API 메세지만 보고도 쉽게 이해가 가능한 자체 표현 구조로 표현
+  5. Client-Server: 서버에서 API 제공, 클라이언트는 사용자 인증 및 컨텍스트를 직접 관리하눈 구조
+  6. Hierachical Structure: 다층 계층으로 구성 가능, 보안 및 암호화 계층 추가 및 네트워크 기반의 중간 매체를 활용 가능
 
 #### REST API
 ![REST](../image/network_restful.png)
-- 구성 요소
-1. URI - 어떤 리소스가 있는지 표현
-2. HTTP Method - 행위
-- 특징
-1. 리소스와 행위를 명시적으로 직관적으로 분리
-- URI는 정보의 자원을 표시, 동사 대신 명사로 표시
-- 자원에 대한 행위는 HTTP Method로 표현
-  + GET: URI가 가진 정보를 검색하고 응답
-  + POST: 요청된 자원 생성, 새로 작성된 리소스의 경우 HTTP 헤더 항목에 Location: URI 포함
-  + DELETE: 요청된 자원을 삭제 요청
-  + PUT: 요청된 자원을 모든 속성을 수정
-  + PATCH: 리소스의 일부분만 수정
-2. 메세지의 경우 Header와 Body를 명확히 분리
-- 보낼 Entity 정보는 Body, API 버전 정보 및 응답받고자하는 MIME 타입 등은 Header에 담기
-3. API 버전 관리
-- 환경에 따라 API 버전 관리, 변경 시 하위호환성을 보장해야 됨
-4. 서버와 클라이언트가 같은 방식을 사용해서 요청
-- 서버/클라이언트가 둘다 json으로 보내던가 text로 보내던가 하는 식으로, URI가 플랫폼 중립적으로 작동
+- API: 프로그램과 프로그램 사이에 **상호작용**을 도와주는 인터페이스
+- 정의: **REST를 기반으로 서비스 API를 구현한 것**
+- OpenAPI를 제공하는 업체 대부분은 REST API 제공
+- 설계 기본 규칙
+  1. 리소스와 행위를 명시적으로 직관적으로 분리
+  - URI는 정보의 자원을 표시, 동사 대신 명사로 표시
+  - 자원에 대한 행위는 HTTP Method로 표현
+  2. 메세지의 경우 Header와 Body를 명확히 분리
+  - 보낼 Entity 정보는 Body, API 버전 정보 및 응답받고자하는 MIME 타입 등은 Header에 담기
+  3. API 버전 관리
+  - 환경에 따라 API 버전 관리, 변경 시 하위호환성을 보장해야 됨
+  4. 서버와 클라이언트가 같은 방식을 사용해서 요청
+  - 서버/클라이언트가 둘다 json으로 보내던가 text로 보내던가 하는 식으로, URI가 플랫폼 중립적으로 작동
 ---
 ## HTTP 응답코드
 - 1XX: Information responses, 서버가 요청을 받았고 클라이언트는 작업을 계속 진행하라는 의미

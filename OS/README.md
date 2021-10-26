@@ -6,11 +6,18 @@
   * Multi-Thread vs Multi-Process
 + [스케쥴러](#스케쥴러)
 + [CPU 스케쥴러](#CPU-스케쥴러)
+  - FCFS
+  - SJF
+  - SRTF
+  - Priority Scheduling
+  - Round Robin(RR)
+    * 시분할 처리 시스템
 + [Synchronization](#Synchronization)
   - 뮤텍스
   - 세마포어
   - 스핀락
   - 모니터
+  - 어토믹
 + [DeadLock](#DeadLock)
 + 메모리 관리 기법
   - [페이징](#페이징)
@@ -24,7 +31,6 @@
     * OPT
     * LRU
     * LFU/MFU
-+ [OSI 7계층](#OSI-7계층)
 
 ## Process VS Thread
 ### 프로세스 + PCB
@@ -179,10 +185,11 @@
 - 프로세스는 Context를 save할 수 있어 가능
 - 장점
   + Response Time이 빨라짐
-  + 모든 프로세스가 공정하게 받을 수 있음 
+  + 모든 프로세스가 공정하게 받을 수 있음
 - 단점
   + 할당 시간이 너무 길 시 FCFS와 같아짐
   + Context Switching 비용 존재
+- 시분할 처리 시스템: 각각의 작업들에게 일정한 CPU 시간만큼을 차례로 할당하는 RR 스케쥴링 사용하는 방식, 각 사용자에게 독립된 컴퓨터를 사용하는 느낌 제공
 
 
 ## Synchronization
@@ -235,9 +242,14 @@
 - 조건동기 Queue는 wait(), notify(), notifyAll()로 호출
 - 세마포어보다 코딩이 훨씬 쉬운데, 이는 항상 스레드가 들어오고 나가는 걸 명시해줘야하는 세마포어와 다르게 Synchronized 키워드만 붙이면 알아서 조절해준다.
 
+### Atomic operation
+- 결코 분해할 수 없는 물리적인 작업을 일컫는 말
+- 경쟁 상태를 해결(동기화)하기 위한 하나의 방법
+- 조건
+  1. 모든 조작이 완료할 때 까지 어떤 프로세스도 변경을 알지 못하게 해야함
+  2. 조작 중 하나라도 실패하면 이전 상태로 복구.
 
 ## DeadLock
-
 - 프로세스가 자원을 얻지 못해 다음 처리를 못하는 상태
 - 시스템이 한정된 자원을 여러 곳에서 사용하려고 시도 시 발생
 
