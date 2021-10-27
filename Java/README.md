@@ -11,6 +11,10 @@
   + 확장 함수
   + Sealed Class
 - [그 외](#그-외)
+  + open
+  + equals/==/hashCode
+  + thread/runnable
+  + HashMap/ArrayList와 HashTable/Vector의 차이점
 
 ## 객체지향 VS 절차지향
 
@@ -307,3 +311,13 @@ fun MutableList<Int>.swap(index1: Int, index2: Int) {
 
 ### 그 외
 - open 키워드: 상속 받을 때 부모 클래스를 명시하기 위해 사용. Kotlin은 자바와 다르게 final 키워드가 기본으로 달려있기 때문에 이를 붙여줘야 한다.
+- 패키지 vs 모듈
+  + 패키지: 서로 관련된 클래스 및 인터페이스를 하나의 디렉토리로 묶은 것
+  + 모듈: 여러 패키지와 이미지 등의 자원을 모아놓은 컨테이너
+- equals(): 동등성 비교, **객체 내부의 값** 비교
+- ==: 동일성 비교, 객체 인스턴스의 **주소값 비교**
+- hashCode(): 같은 해시코드 값을 가지는지 확인, , HashMap, HashSet, HashTable에 사용.
+- Java Thread
+  + Thread 상속
+  + Runnable 인터페이스
+- HashMap/ArrayList와 HashTable/Vector의 차이점: 동기화 차이, 전자는 동기화 지원을 안해주고 후자는 지원. 이 때문에 멀티쓰레딩 환경에선 후자를 사용해줘야 한다.(ConcurrentHashMap)
