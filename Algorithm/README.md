@@ -1,5 +1,6 @@
 # Algorithm
-
+- [시간 복잡도](#시간-복잡도)
+  + 빅오 표기법
 - [정렬](#정렬)
   + [버블 정렬](#버블-정렬)
   + [선택 정렬](#선택-정렬)
@@ -9,6 +10,39 @@
   + [합병 정렬](#합병-정렬)
   + [퀵 정렬](#퀵-정렬)
   + [기수 정렬](#기수-정렬)
+  + [안정 정렬 vs 불안정 정렬](#안정-정렬-vs-불안정-정렬)
+  + [각 알고리즘 별 복잡도](#각-알고리즘-별-복잡도)
+
+## 시간 복잡도
+- 실행시간은 컴퓨터가 알고리즘 코드를 실행하는 속도에 의존
+- 점근적 표기법: **가장 큰 영향을 주는 항**만 계산하는, 입력 값 크기에 따른 함수의 **증가량**을 표기
+- 점근적 표기법 종류
+  1. 오메가 표기법: 최상의 경우
+  2. 세타 표기법: 평균의 경우
+  3. 빅오 표기법: 최악의 경우
+- 이 중에서 세타는 평가하기가 까다로워 **빅오 표기법**을 많이 사용
+
+### 빅오 표기법
+
+![bigO](../image/algorithm_bigO.png)
+
+- Big-O Notation
+- 불필요한 연산을 제거해 알고리즘 분석을 쉽게 할 목적
+- 시간 복잡도 및 공간 복잡도로 나뉨
+- 시간 복잡도  
+  + **알고리즘의 성능 설명**
+  + n의 단위가 가장 큰 영향을 미침
+  + 종류
+    * O(1): **상수**, 입력에 관계없이 복잡도 유지, 하나의 루프를 사용하거나 두 개가 개별적으로 반복
+    * O(N): **선형**, 입력 증가 시 처리 시간이 선형적으로 증가
+    * O(N^2): **Square**, 반복문이 2번 있는 케이스
+    * O(logN): 정렬 알고리즘에서 많이 사용  
+- 자료구조 별 시간복잡도
+![structure](../image/algorithm_structure.png)
+
+
+- 출처: https://blog.chulgil.me/algorithm/
+
 
 ## 정렬
 ### 버블 정렬
@@ -218,7 +252,7 @@ static void quickSort(int[] arr, int start, int end){
   int pivot = arr[start];//pivot을 첫번째 원소로 잡음
   int low = start + 1;//start 다음을 처음
   int high = end - 1;//end는 닽지 않는 곳, -1 해줌
-  
+
   while(low <= high){//
     while(low < end && arr[low] <= pivot){
       low++;
@@ -238,7 +272,6 @@ static void quickSort(int[] arr, int start, int end){
   arr[start] = arr[high];
   arr[high] = tmp;
 
-
   quickSort(arr, start, high);
   quickSort(arr, high+1, end);
 }
@@ -252,3 +285,13 @@ static void quickSort(int[] arr, int start, int end){
 - 시간 복잡도: O(dN)
 - 버킷이란 추가 메모리 필요
 - 데이터 타입 일정한 경우에만 가능
+
+### 안정 정렬 vs 불안정 정렬
+- 안정 정렬: 중복된 값을 입력 순서와 동일하게 정렬
+  + 종류: 삽입, 버블, 병합 정렬
+- 불안정 정렬: 중복된 값을 입력 순서와 다르게 정렬
+  + 종류: 선택, 퀵, 힙 정렬  
+
+
+### 각 알고리즘 별 복잡도
+![sorting](../image/algorithm_sorting.png)
