@@ -514,6 +514,7 @@ Glide.with(this).load("이미지 url...").into(imageView)
 ![MVVM](../image/android_mvvm.png)
 
 - View는 ViewModel을 관찰, UI 갱신 역할에 충실
+- ViewModel은 비즈니스 로직을 담당, 이를 계산하고 바인딩을 통해 직접 View에 쏴주는 역할
 - 장점
   1. View가 데이터를 실시간으로 관찰, LiveData 사용시 자동으로 UI 변경
   2. 생명주기로부터 안전
