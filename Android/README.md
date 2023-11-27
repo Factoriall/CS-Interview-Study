@@ -20,6 +20,7 @@
   + ViewModel
   + LiveData
   + DataBinding
+- [Flow](#Flow)
 - [그외 나올만한 Android 질문 정리](#그외-나올만한-Android-질문-정리)
   + SharedPreference
   + ANR
@@ -557,6 +558,10 @@ class CounterViewModel : ViewModel() {
     }
 }
 ~~~
+- 단점
+  1. lifecycle을 관찰하는 데이터이기 때문에, 안드로이드와 너무 밀접한 관계를 가짐
+  2. Observer 패턴을 가지기에 이를 계속 관찰할 수 있으나, 이를 해제하거나 하는 유연성이 떨어짐 
+  3. 기본적으로 데이터가 nullable, 이를 강제할 수 잇는 방법이 없음
 
 ### DataBinding
 - 간단하게 xml 파일에 data을 연결해서 사용하는 것
@@ -597,6 +602,14 @@ android:onClick="@{() -> viewModel.decrease()}"
 
 - 출처: https://junghun0.github.io/2019/05/22/android-viewmodel/
 
+## Flow
+- 여러 값들을 순서대로 방출할 수 있는 타입
+- LiveData와 유사한 차이를 보임(StateFlow)
+- 차이
+  1. LiveData는 라이프사이클을 알고 있기 때문에 Stop 상태에 알아서 멈춰주지만, StateFlow는 이를 알지 못하기 때문에 repeatOnLifecycle 등의 추가 라이프사이클 상태를 알고 있어야 생명주기대로 움직일 수 있다.
+  2. LiveData는 초기값을 전달할 필요가 없지만, StateFlow는 필요하다.
+  3. 기본적으로 Flow는 Coroutine과 밀접한 관계가 있기 때문에 이를 활용할 수 있지만 LiveData는 활용이 불가능하다. 
+
 ## 그외 나올만한 Android 질문 정리
 - SharedPreference: 복잡한 자료가 아닌 액티비티나 애플리케이션 등에서 사용하는 간단한 설정 값 등을 저장할 때 사용. 이를 이용해 간단한 변수를 액티비티 간에 전달도 가능
 - ANR: Application Not Responding
@@ -609,6 +622,8 @@ android:onClick="@{() -> viewModel.decrease()}"
   + Bitmap: 픽셀로 구성, 특정 해상도에 제한됨. Ex) PNG, JPEG
 - Android Jetpack: 안드로이드 앱을 구축하는데 도움을 주는 라이브러리 모음, Room 등이 여기에 포함
   + Compose: 안드로이드 UI를 만드는 최신 툴킷, xml 및 ui 위젯을 사용하지 않아도 된다는 장점.
+    * DSL로 만들어져 있으며, Box 및 Column, Row를 통해 뷰를 구성할 수 있음
+    * LazyColumn 등을 활용해 RecylcerView 구현 가능 
 - Context: 애플리케이션 환경에 대한 글로벌 정보를 가지는 인터페이스
   + Application Context: 싱글톤 오브젝트 생성 시 필요
   + Activity Context: Activity 내에 유효한 Context
